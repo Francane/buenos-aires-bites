@@ -267,4 +267,4 @@ export const translations = {
   },
 } as const;
 
-export type TranslationKey = typeof translations['es'];
+export type TranslationKey = typeof translations[Locale];
