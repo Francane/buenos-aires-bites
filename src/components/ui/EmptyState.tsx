@@ -1,17 +1,19 @@
-export default function SkeletonLoader({ count = 6 }: { count?: number }) {
+import { SearchX } from 'lucide-react';
+
+interface EmptyStateProps {
+  title: string;
+  description: string;
+  icon?: React.ReactNode;
+}
+
+export default function EmptyState({ title, description, icon }: EmptyStateProps) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="bg-card border border-border rounded-xl overflow-hidden animate-pulse">
-          <div className="aspect-[4/3] bg-muted" />
-          <div className="p-4 space-y-3">
-            <div className="h-5 w-2/3 bg-muted rounded" />
-            <div className="h-3 w-1/2 bg-muted rounded" />
-            <div className="h-3 w-full bg-muted rounded" />
-            <div className="h-3 w-3/4 bg-muted rounded" />
-          </div>
-        </div>
-      ))}
+    <div className="flex flex-col items-center justify-center py-16 text-center">
+      <div className="p-4 rounded-full bg-muted mb-4">
+        {icon ?? <SearchX className="h-8 w-8 text-muted-foreground" />}
+      </div>
+      <h3 className="font-display text-lg font-semibold text-foreground">{title}</h3>
+      <p className="text-sm text-muted-foreground mt-1 max-w-sm">{description}</p>
     </div>
   );
 }
