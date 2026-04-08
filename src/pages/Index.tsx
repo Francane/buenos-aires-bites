@@ -18,8 +18,24 @@ import FavoritesSection from '@/components/favorites/FavoritesSection';
 import SearchModal from '@/components/search/SearchModal';
 import GeoBanner from '@/components/geo/GeoBanner';
 import SkeletonLoader from '@/components/ui/SkeletonLoader';
+import ErrorBoundary from '@/components/error/ErrorBoundary';
 
 const MapSection = lazy(() => import('@/components/map/MapSection'));
+
+function MapFallback() {
+  return (
+    <section id="explorar" className="py-16">
+      <div className="container mx-auto px-4">
+        <div className="rounded-xl border border-border bg-muted/50 flex items-center justify-center" style={{ height: '500px' }}>
+          <div className="text-center space-y-2">
+            <p className="text-lg font-semibold text-foreground">Mapa no disponible</p>
+            <p className="text-sm text-muted-foreground">No se pudo cargar el mapa. El resto de la página sigue funcionando.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function Index() {
   const { t } = useLocale();
@@ -32,7 +48,6 @@ export default function Index() {
   const [detailOpen, setDetailOpen] = useState(false);
   const [focusVenueId, setFocusVenueId] = useState<string | null>(null);
 
-  // Hero search filters
   const [searchQuery, setSearchQuery] = useState('');
   const [searchNeighborhood, setSearchNeighborhood] = useState('');
   const [searchCuisine, setSearchCuisine] = useState('');
@@ -98,9 +113,11 @@ export default function Index() {
       <HeroSection onExplore={handleExplore} onFavorites={handleFavorites} />
       <HeroSearch onSearch={handleSearch} />
 
-      <Suspense fallback={<div className="container mx-auto px-4 py-16"><SkeletonLoader count={1} /></div>}>
-        <MapSection venues={allVenues} onSelectVenue={handleMapSelect} focusVenueId={focusVenueId} />
-      </Suspense>
+      <ErrorBoundary fallback={<MapFallback />}>
+        <Suspense fallback={<div className="container mx-auto px-4 py-16"><SkeletonLoader count={1} /></div>}>
+          <MapSection venues={allVenues} onSelectVenue={handleMapSelect} focusVenueId={focusVenueId} />
+        </Suspense>
+      </ErrorBoundary>
 
       <VenueGrid
         venues={filteredVenues}

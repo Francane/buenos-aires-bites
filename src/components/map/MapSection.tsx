@@ -1,4 +1,4 @@
-import { useEffect, useRef, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -31,14 +31,13 @@ interface MapSectionProps {
 
 export default function MapSection({ venues, onSelectVenue, focusVenueId }: MapSectionProps) {
   const { t } = useLocale();
-  const mapRef = useRef<L.Map | null>(null);
 
   const center = useMemo<[number, number]>(() => {
     if (focusVenueId) {
       const v = venues.find(v => v.id === focusVenueId);
       if (v) return [v.coordinates.lat, v.coordinates.lng];
     }
-    return [-34.6037, -58.3816]; // Buenos Aires center
+    return [-34.6037, -58.3816];
   }, [focusVenueId, venues]);
 
   const focusCenter = useMemo<[number, number] | null>(() => {
@@ -58,7 +57,6 @@ export default function MapSection({ venues, onSelectVenue, focusVenueId }: MapS
             center={center}
             zoom={13}
             style={{ height: '100%', width: '100%' }}
-            ref={mapRef}
             scrollWheelZoom={true}
           >
             <TileLayer
