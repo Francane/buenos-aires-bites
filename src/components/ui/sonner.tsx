@@ -1,4 +1,4 @@
-import { useTheme } from "next-themes";
+// next-themes not used in this project
 import { Toaster as Sonner, toast } from "sonner";
 
 type ToasterProps = React.ComponentProps<typeof Sonner>;
