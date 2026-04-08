@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { LocaleProvider } from "@/i18n/LocaleProvider";
+import ErrorBoundary from "@/components/error/ErrorBoundary";
 import Index from "./pages/Index";
 import AgregarLugar from "./pages/AgregarLugar";
 import Ayuda from "./pages/Ayuda";
@@ -17,13 +18,15 @@ const App = () => (
       <TooltipProvider>
         <Sonner />
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/agregar-lugar" element={<AgregarLugar />} />
-            <Route path="/ayuda" element={<Ayuda />} />
-            <Route path="/contacto" element={<Contacto />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <ErrorBoundary>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/agregar-lugar" element={<AgregarLugar />} />
+              <Route path="/ayuda" element={<Ayuda />} />
+              <Route path="/contacto" element={<Contacto />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </ErrorBoundary>
         </BrowserRouter>
       </TooltipProvider>
     </LocaleProvider>
