@@ -33,7 +33,7 @@ export default function VenueDetail({ venue, open, onClose, isFavorite, onToggle
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-foreground/40 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-foreground/40 backdrop-blur-md z-50"
             onClick={onClose}
           />
           <motion.div
@@ -41,35 +41,38 @@ export default function VenueDetail({ venue, open, onClose, isFavorite, onToggle
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            className="fixed right-0 top-0 bottom-0 w-full max-w-lg bg-card z-50 overflow-y-auto shadow-2xl"
+            className="fixed right-0 top-0 bottom-0 w-full max-w-lg glass-strong z-50 overflow-y-auto shadow-2xl"
           >
             <div className="relative">
-              <img src={venue.imageUrl} alt={venue.name} className="w-full h-56 object-cover" />
+              <img src={venue.imageUrl} alt={venue.name} className="w-full h-64 object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
               <button
                 onClick={onClose}
-                className="absolute top-4 right-4 p-2 rounded-full bg-background/80 backdrop-blur-sm"
+                className="absolute top-4 right-4 p-2.5 rounded-full glass hover:bg-background/90 transition-colors"
                 aria-label={t.detail.close}
               >
                 <X className="h-5 w-5" />
               </button>
-              <span className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-semibold ${venue.isOpen ? 'bg-sage/20 text-sage' : 'bg-destructive/20 text-destructive'}`}>
+              <span className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-semibold glass ${venue.isOpen ? 'text-sage' : 'text-destructive'}`}>
                 {venue.isOpen ? t.venues.open : t.venues.closed}
               </span>
             </div>
 
-            <div className="p-6">
+            <div className="p-6 -mt-8 relative">
               <h2 className="font-display text-2xl font-bold text-foreground">{venue.name}</h2>
               <div className="flex items-center gap-2 mt-2">
-                <Star className="h-4 w-4 text-gold fill-gold" />
-                <span className="font-bold text-foreground">{venue.rating}</span>
+                <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-gold/10">
+                  <Star className="h-4 w-4 text-gold fill-gold" />
+                  <span className="font-bold text-foreground">{venue.rating}</span>
+                </div>
                 <span className="text-sm text-muted-foreground">({venue.reviewCount} {t.venues.reviews})</span>
               </div>
 
               <div className="flex gap-2 mt-5">
                 <button
                   onClick={() => onToggleFavorite(venue.id)}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg border font-medium text-sm transition-colors ${
-                    isFavorite ? 'bg-primary/10 border-primary text-primary' : 'border-border text-muted-foreground hover:text-foreground'
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-medium text-sm transition-all ${
+                    isFavorite ? 'bg-primary/10 border border-primary/30 text-primary' : 'glass text-muted-foreground hover:text-foreground'
                   }`}
                 >
                   <Heart className={`h-4 w-4 ${isFavorite ? 'fill-primary' : ''}`} />
@@ -77,7 +80,7 @@ export default function VenueDetail({ venue, open, onClose, isFavorite, onToggle
                 </button>
                 <button
                   onClick={() => onShare(venue)}
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg border border-border text-muted-foreground hover:text-foreground font-medium text-sm"
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl glass text-muted-foreground hover:text-foreground font-medium text-sm"
                 >
                   <Share2 className="h-4 w-4" />
                   {t.detail.share}
@@ -86,7 +89,7 @@ export default function VenueDetail({ venue, open, onClose, isFavorite, onToggle
                   href={directionsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg bg-primary text-primary-foreground font-medium text-sm"
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-primary text-primary-foreground font-medium text-sm shine"
                 >
                   <Navigation className="h-4 w-4" />
                   {t.detail.directions}
@@ -94,21 +97,21 @@ export default function VenueDetail({ venue, open, onClose, isFavorite, onToggle
               </div>
 
               <div className="space-y-4 mt-6">
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-3 p-3 rounded-xl bg-muted/30">
                   <MapPin className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">{t.detail.address}</p>
                     <p className="text-sm text-foreground">{venue.address}</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-3 p-3 rounded-xl bg-muted/30">
                   <Clock className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">{t.detail.hours}</p>
                     <p className="text-sm text-foreground">{venue.hours}</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-3 p-3 rounded-xl bg-muted/30">
                   <Tag className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">{t.detail.cuisine}</p>
@@ -116,7 +119,7 @@ export default function VenueDetail({ venue, open, onClose, isFavorite, onToggle
                   </div>
                 </div>
                 {venue.reservationInfo && (
-                  <div className="p-3 rounded-lg bg-accent/10 border border-accent/20 text-sm text-accent-foreground">
+                  <div className="p-3 rounded-xl bg-accent/10 border border-accent/20 text-sm text-accent-foreground">
                     <span className="font-medium">{t.detail.reservation}:</span> {venue.reservationInfo}
                   </div>
                 )}
@@ -145,7 +148,7 @@ export default function VenueDetail({ venue, open, onClose, isFavorite, onToggle
                   </p>
                   <div className="space-y-3">
                     {venue.reviews.map(r => (
-                      <div key={r.id} className="p-3 rounded-lg bg-muted/50 border border-border">
+                      <div key={r.id} className="p-3 rounded-xl glass">
                         <div className="flex items-center justify-between">
                           <span className="text-sm font-medium text-foreground">{platformIcons[r.platform]} {r.author}</span>
                           <div className="flex items-center gap-1">

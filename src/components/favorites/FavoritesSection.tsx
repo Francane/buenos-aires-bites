@@ -1,4 +1,5 @@
 import { Heart } from 'lucide-react';
+import { motion } from 'framer-motion';
 import type { Venue } from '@/types/venue';
 import { useLocale } from '@/i18n/LocaleProvider';
 import VenueCard from '@/components/venues/VenueCard';
@@ -19,15 +20,25 @@ export default function FavoritesSection({ venues, favoriteIds, isFavorite, onTo
   return (
     <section id="favoritos" className="py-16">
       <div className="container mx-auto px-4">
-        <div className="flex items-center gap-3 mb-2">
-          <h2 className="font-display text-3xl font-bold text-foreground">{t.favorites.title}</h2>
-          {favVenues.length > 0 && (
-            <span className="px-2.5 py-0.5 bg-primary/10 text-primary text-sm font-bold rounded-full">
-              {favVenues.length} {t.favorites.count}
-            </span>
-          )}
-        </div>
-        <p className="text-muted-foreground mb-8">{t.favorites.subtitle}</p>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <div className="flex items-center gap-3 mb-2">
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground">{t.favorites.title}</h2>
+            {favVenues.length > 0 && (
+              <motion.span
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                className="px-3 py-1 bg-primary/10 text-primary text-sm font-bold rounded-full"
+              >
+                {favVenues.length} {t.favorites.count}
+              </motion.span>
+            )}
+          </div>
+          <p className="text-muted-foreground mb-8">{t.favorites.subtitle}</p>
+        </motion.div>
 
         {favVenues.length === 0 ? (
           <EmptyState

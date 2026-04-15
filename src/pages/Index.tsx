@@ -12,11 +12,15 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import HeroSection from '@/components/home/HeroSection';
 import HeroSearch from '@/components/home/HeroSearch';
+import StatsSection from '@/components/home/StatsSection';
+import TrendingSection from '@/components/home/TrendingSection';
+import CategoryPills from '@/components/home/CategoryPills';
 import VenueGrid from '@/components/venues/VenueGrid';
 import VenueDetail from '@/components/venues/VenueDetail';
 import FavoritesSection from '@/components/favorites/FavoritesSection';
 import SearchModal from '@/components/search/SearchModal';
 import GeoBanner from '@/components/geo/GeoBanner';
+import ScrollToTop from '@/components/ui/ScrollToTop';
 import SkeletonLoader from '@/components/ui/SkeletonLoader';
 import ErrorBoundary from '@/components/error/ErrorBoundary';
 
@@ -26,7 +30,7 @@ function MapFallback() {
   return (
     <section id="explorar" className="py-16">
       <div className="container mx-auto px-4">
-        <div className="rounded-xl border border-border bg-muted/50 flex items-center justify-center" style={{ height: '500px' }}>
+        <div className="rounded-2xl glass-strong flex items-center justify-center" style={{ height: '500px' }}>
           <div className="text-center space-y-2">
             <p className="text-lg font-semibold text-foreground">Mapa no disponible</p>
             <p className="text-sm text-muted-foreground">No se pudo cargar el mapa. El resto de la página sigue funcionando.</p>
@@ -101,6 +105,13 @@ export default function Index() {
     setDetailOpen(true);
   }, []);
 
+  const handleCategorySelect = useCallback((cuisine: string) => {
+    setSearchCuisine(cuisine);
+    setSearchQuery('');
+    setSearchNeighborhood('');
+    document.getElementById('categorias')?.scrollIntoView({ behavior: 'smooth' });
+  }, []);
+
   return (
     <div className="min-h-screen">
       <BackgroundFX />
@@ -112,6 +123,9 @@ export default function Index() {
 
       <HeroSection onExplore={handleExplore} onFavorites={handleFavorites} />
       <HeroSearch onSearch={handleSearch} />
+      <StatsSection />
+      <TrendingSection venues={allVenues} onSelectVenue={handleSelectVenue} />
+      <CategoryPills onSelectCuisine={handleCategorySelect} />
 
       <ErrorBoundary fallback={<MapFallback />}>
         <Suspense fallback={<div className="container mx-auto px-4 py-16"><SkeletonLoader count={1} /></div>}>
@@ -151,6 +165,8 @@ export default function Index() {
         venues={allVenues}
         onSelectVenue={handleSelectVenue}
       />
+
+      <ScrollToTop />
 
       {geo.showBanner && (
         <GeoBanner onAccept={geo.acceptConsent} onDismiss={geo.dismissConsent} />
