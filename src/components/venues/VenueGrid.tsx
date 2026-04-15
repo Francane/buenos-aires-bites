@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { LayoutGrid, List } from 'lucide-react';
+import { motion } from 'framer-motion';
 import type { Venue } from '@/types/venue';
 import { useLocale } from '@/i18n/LocaleProvider';
 import { getCuisines, getAllTags } from '@/data/venues';
@@ -49,26 +50,31 @@ export default function VenueGrid({ venues, isFavorite, onToggleFavorite, onSele
   return (
     <section id="categorias" className="py-16">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8"
+        >
           <div>
-            <h2 className="font-display text-3xl font-bold text-foreground">{t.venues.title}</h2>
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground">{t.venues.title}</h2>
             <p className="text-muted-foreground mt-1">{t.venues.subtitle}</p>
           </div>
-          <div className="flex items-center gap-2">
-            <button onClick={() => setView('grid')} className={`p-2 rounded-md ${view === 'grid' ? 'bg-primary/10 text-primary' : 'text-muted-foreground'}`} aria-label={t.venues.grid}>
+          <div className="flex items-center gap-1 p-1 rounded-xl glass">
+            <button onClick={() => setView('grid')} className={`p-2 rounded-lg transition-colors ${view === 'grid' ? 'bg-primary/10 text-primary' : 'text-muted-foreground'}`} aria-label={t.venues.grid}>
               <LayoutGrid className="h-4 w-4" />
             </button>
-            <button onClick={() => setView('list')} className={`p-2 rounded-md ${view === 'list' ? 'bg-primary/10 text-primary' : 'text-muted-foreground'}`} aria-label={t.venues.list}>
+            <button onClick={() => setView('list')} className={`p-2 rounded-lg transition-colors ${view === 'list' ? 'bg-primary/10 text-primary' : 'text-muted-foreground'}`} aria-label={t.venues.list}>
               <List className="h-4 w-4" />
             </button>
           </div>
-        </div>
+        </motion.div>
 
         <div className="flex flex-wrap gap-3 mb-6">
           <select
             value={cuisineFilter}
             onChange={e => { setCuisineFilter(e.target.value); setVisibleCount(PAGE_SIZE); }}
-            className="px-3 py-1.5 rounded-lg bg-background border border-input text-sm text-foreground"
+            className="px-3 py-1.5 rounded-xl glass text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
           >
             <option value="">{t.venues.filterByCuisine}: {t.venues.all}</option>
             {cuisines.map(c => <option key={c} value={c}>{c}</option>)}
@@ -76,7 +82,7 @@ export default function VenueGrid({ venues, isFavorite, onToggleFavorite, onSele
           <select
             value={tagFilter}
             onChange={e => { setTagFilter(e.target.value); setVisibleCount(PAGE_SIZE); }}
-            className="px-3 py-1.5 rounded-lg bg-background border border-input text-sm text-foreground"
+            className="px-3 py-1.5 rounded-xl glass text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
           >
             <option value="">{t.venues.filterByTag}: {t.venues.all}</option>
             {tags.map(tag => <option key={tag} value={tag}>{tag}</option>)}
@@ -106,13 +112,15 @@ export default function VenueGrid({ venues, isFavorite, onToggleFavorite, onSele
               ))}
             </div>
             {visibleCount < filtered.length && (
-              <div className="text-center mt-8">
-                <button
+              <div className="text-center mt-10">
+                <motion.button
+                  whileHover={{ scale: 1.03, y: -2 }}
+                  whileTap={{ scale: 0.97 }}
                   onClick={() => setVisibleCount(prev => prev + PAGE_SIZE)}
-                  className="px-6 py-2.5 rounded-lg border-2 border-primary text-primary font-semibold hover:bg-primary/5 transition-colors"
+                  className="px-8 py-3 rounded-xl glass-strong text-primary font-semibold hover:bg-primary/5 transition-colors"
                 >
                   {t.venues.loadMore}
-                </button>
+                </motion.button>
               </div>
             )}
           </>
