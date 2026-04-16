@@ -17,9 +17,12 @@ export interface Venue {
   rating: number;
   reviewCount: number;
   imageUrl: string;
+  images?: string[];
   isOpen: boolean;
   coordinates: { lat: number; lng: number };
   tags?: string[];
   reservationInfo?: string;
   reviews?: VenueReview[];
+  priceRange?: 1 | 2 | 3 | 4;
+  featured?: boolean;
 }

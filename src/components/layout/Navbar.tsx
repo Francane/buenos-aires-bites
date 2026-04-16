@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Menu, X, Search, Heart, MapPin, Plus } from 'lucide-react';
+import { Menu, X, Search, Heart, MapPin, Plus, Moon, Sun } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocale } from '@/i18n/LocaleProvider';
+import { useDarkMode } from '@/hooks/useDarkMode';
 import { Button } from '@/components/ui/button';
 
 interface NavbarProps {
@@ -14,6 +15,7 @@ const sections = ['inicio', 'explorar', 'categorias', 'favoritos'] as const;
 
 export default function Navbar({ favCount, onSearchOpen, onAddPlace }: NavbarProps) {
   const { t, locale, setLocale } = useLocale();
+  const { isDark, toggle: toggleDark } = useDarkMode();
   const [scrollProgress, setScrollProgress] = useState(0);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('inicio');
@@ -80,7 +82,7 @@ export default function Navbar({ favCount, onSearchOpen, onAddPlace }: NavbarPro
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           <button onClick={onSearchOpen} className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors" aria-label={t.nav.search}>
             <Search className="h-5 w-5" />
           </button>
@@ -99,6 +101,24 @@ export default function Navbar({ favCount, onSearchOpen, onAddPlace }: NavbarPro
               )}
             </AnimatePresence>
           </button>
+          <motion.button
+            whileTap={{ rotate: 180 }}
+            onClick={toggleDark}
+            className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+            aria-label="Toggle dark mode"
+          >
+            <AnimatePresence mode="wait">
+              {isDark ? (
+                <motion.div key="sun" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
+                  <Sun className="h-5 w-5" />
+                </motion.div>
+              ) : (
+                <motion.div key="moon" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}>
+                  <Moon className="h-5 w-5" />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.button>
           <Button size="sm" onClick={onAddPlace} className="hidden sm:flex gap-1 rounded-lg shine">
             <Plus className="h-4 w-4" /> {t.nav.addPlace}
           </Button>

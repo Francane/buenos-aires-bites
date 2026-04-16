@@ -15,6 +15,8 @@ import HeroSearch from '@/components/home/HeroSearch';
 import StatsSection from '@/components/home/StatsSection';
 import TrendingSection from '@/components/home/TrendingSection';
 import CategoryPills from '@/components/home/CategoryPills';
+import TestimonialsSection from '@/components/home/TestimonialsSection';
+import NewsletterSection from '@/components/home/NewsletterSection';
 import VenueGrid from '@/components/venues/VenueGrid';
 import VenueDetail from '@/components/venues/VenueDetail';
 import FavoritesSection from '@/components/favorites/FavoritesSection';
@@ -147,6 +149,9 @@ export default function Index() {
         onToggleFavorite={handleToggleFavorite}
         onSelectVenue={handleSelectVenue}
       />
+
+      <TestimonialsSection />
+      <NewsletterSection />
 
       <Footer />
 
