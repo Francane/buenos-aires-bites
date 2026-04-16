@@ -30,7 +30,7 @@ function PriceRange({ level }: { level: number }) {
 export default function VenuePage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
   const { favorites, isFavorite, toggleFavorite } = useFavorites();
   const { share } = useShare();
 
