@@ -17,16 +17,18 @@ const queryClient = new QueryClient();
 function AnimatedRoutes() {
   const location = useLocation();
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<Index />} />
-        <Route path="/venue/:id" element={<VenuePage />} />
-        <Route path="/agregar-lugar" element={<AgregarLugar />} />
-        <Route path="/ayuda" element={<Ayuda />} />
-        <Route path="/contacto" element={<Contacto />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </AnimatePresence>
+    <LayoutGroup>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<Index />} />
+          <Route path="/venue/:id" element={<VenuePage />} />
+          <Route path="/agregar-lugar" element={<AgregarLugar />} />
+          <Route path="/ayuda" element={<Ayuda />} />
+          <Route path="/contacto" element={<Contacto />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </AnimatePresence>
+    </LayoutGroup>
   );
 }
 
