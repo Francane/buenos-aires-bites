@@ -61,9 +61,13 @@ function FeaturedBadge() {
   );
 }
 
-function RatingPill({ rating, reviewCount }: { rating: number; reviewCount?: number }) {
+function RatingPill({ rating, reviewCount, layoutId }: { rating: number; reviewCount?: number; layoutId?: string }) {
   return (
-    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-foreground/5 border border-foreground/5">
+    <motion.span
+      layoutId={layoutId}
+      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-foreground/5 border border-foreground/5"
+    >
       <Star className="h-3.5 w-3.5 text-gold fill-gold" aria-hidden />
       <span className="text-sm font-bold text-foreground leading-none">{rating.toFixed(1)}</span>
       {reviewCount !== undefined && (
@@ -71,7 +75,7 @@ function RatingPill({ rating, reviewCount }: { rating: number; reviewCount?: num
           ({reviewCount})
         </span>
       )}
-    </span>
+    </motion.span>
   );
 }
 
