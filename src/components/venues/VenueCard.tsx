@@ -260,10 +260,18 @@ export default function VenueCard({
         {/* Content */}
         <div className="flex flex-col flex-1 p-4 sm:p-5 gap-2.5">
           <div className="flex items-start justify-between gap-3">
-            <h3 className="font-display font-bold text-foreground text-[17px] sm:text-lg leading-snug tracking-tight line-clamp-1">
+            <motion.h3
+              layoutId={`venue-title-${venue.id}`}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="font-display font-bold text-foreground text-[17px] sm:text-lg leading-snug tracking-tight line-clamp-1"
+            >
               {venue.name}
-            </h3>
-            <RatingPill rating={venue.rating} reviewCount={venue.reviewCount} />
+            </motion.h3>
+            <RatingPill
+              rating={venue.rating}
+              reviewCount={venue.reviewCount}
+              layoutId={`venue-rating-${venue.id}`}
+            />
           </div>
 
           <div className="flex items-center gap-1.5 text-[13px] text-muted-foreground">
