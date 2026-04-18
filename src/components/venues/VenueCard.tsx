@@ -235,7 +235,9 @@ export default function VenueCard({
       >
         {/* Image */}
         <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-          <img
+          <motion.img
+            layoutId={`venue-image-${venue.id}`}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             src={venue.imageUrl}
             alt=""
             className="h-full w-full object-cover transition-transform duration-[700ms] ease-out group-hover:scale-[1.04]"
