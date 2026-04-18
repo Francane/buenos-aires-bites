@@ -1,6 +1,10 @@
+import { useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ArrowLeft, Heart, Share2, Navigation, Star, Clock, MapPin, Tag, MessageCircle, DollarSign, Award } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import {
+  ArrowLeft, Heart, Share2, Navigation, Star, Clock, MapPin, Tag,
+  DollarSign, Award, Calendar, ChevronDown,
+} from 'lucide-react';
 import { venues } from '@/data/venues';
 import { useLocale } from '@/i18n/LocaleProvider';
 import { useFavorites } from '@/hooks/useFavorites';
@@ -10,18 +14,18 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import BackgroundFX from '@/components/layout/BackgroundFX';
 import VenueCard from '@/components/venues/VenueCard';
-
-const platformIcons: Record<string, string> = {
-  tiktok: '🎵',
-  google: '🔍',
-  web: '🌐',
-};
+import VenueGallery from '@/components/venues/VenueGallery';
+import VenueReviews from '@/components/venues/VenueReviews';
+import { cn } from '@/lib/utils';
 
 function PriceRange({ level }: { level: number }) {
   return (
-    <span className="flex items-center gap-0.5">
+    <span className="inline-flex items-center" aria-label={`Precio nivel ${level} de 4`}>
       {Array.from({ length: 4 }).map((_, i) => (
-        <DollarSign key={i} className={`h-3.5 w-3.5 ${i < level ? 'text-primary' : 'text-muted-foreground/30'}`} />
+        <DollarSign
+          key={i}
+          className={cn('h-3.5 w-3.5', i < level ? 'text-foreground' : 'text-muted-foreground/30')}
+        />
       ))}
     </span>
   );
@@ -33,6 +37,13 @@ export default function VenuePage() {
   const { t, locale } = useLocale();
   const { favorites, isFavorite, toggleFavorite } = useFavorites();
   const { share } = useShare();
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  const { scrollY } = useScroll();
+  const heroY = useTransform(scrollY, [0, 600], [0, 150]);
+  const heroScale = useTransform(scrollY, [0, 600], [1, 1.08]);
+  const heroOpacity = useTransform(scrollY, [0, 400], [1, 0.4]);
+  const scrollHintOpacity = useTransform(scrollY, [0, 120], [1, 0]);
 
   const venue = venues.find(v => v.id === id);
 
@@ -52,6 +63,7 @@ export default function VenuePage() {
     .slice(0, 3);
 
   const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${venue.coordinates.lat},${venue.coordinates.lng}`;
+  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${venue.coordinates.lat},${venue.coordinates.lng}`;
 
   const handleToggleFav = () => {
     const added = toggleFavorite(venue.id);
@@ -59,9 +71,10 @@ export default function VenuePage() {
   };
 
   const allImages = venue.images?.length ? venue.images : [venue.imageUrl];
+  const fav = isFavorite(venue.id);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
       <BackgroundFX />
       <Navbar
         favCount={favorites.length}
@@ -69,191 +82,175 @@ export default function VenuePage() {
         onAddPlace={() => navigate('/agregar-lugar')}
       />
 
-      {/* Parallax hero */}
-      <div className="relative h-[50vh] md:h-[60vh] overflow-hidden">
+      {/* === CINEMATIC HERO === */}
+      <section
+        ref={heroRef}
+        className="relative h-[78vh] md:h-[88vh] overflow-hidden"
+      >
+        {/* Backdrop image with parallax */}
         <motion.div
-          initial={{ scale: 1.1 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 1.2, ease: 'easeOut' }}
-          className="absolute inset-0"
+          style={{ y: heroY, scale: heroScale, opacity: heroOpacity }}
+          className="absolute inset-0 will-change-transform"
         >
-          <img
+          <motion.img
+            layoutId={`venue-image-${venue.id}`}
             src={venue.imageUrl}
             alt={venue.name}
             className="w-full h-full object-cover"
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           />
         </motion.div>
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
-        
+
+        {/* Vignette + bottom gradient */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'radial-gradient(ellipse at center, transparent 30%, hsl(var(--background) / 0.3) 100%)',
+          }}
+        />
+        <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-background via-background/85 to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-background/60 to-transparent pointer-events-none" />
+
         {/* Back button */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
+        <motion.button
+          initial={{ opacity: 0, x: -16 }}
           animate={{ opacity: 1, x: 0 }}
-          className="absolute top-24 left-4 md:left-8"
+          transition={{ delay: 0.15, duration: 0.4 }}
+          onClick={() => navigate(-1)}
+          className="absolute top-24 left-4 md:left-8 z-10 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-background/70 backdrop-blur-md border border-border text-foreground text-sm font-medium hover:bg-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         >
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl glass text-foreground text-sm font-medium hover:bg-background/80 transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            {t.detail.close}
-          </button>
-        </motion.div>
+          <ArrowLeft className="h-4 w-4" />
+          {t.detail.close}
+        </motion.button>
 
-        {/* Featured badge */}
-        {venue.featured && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="absolute top-24 right-4 md:right-8"
-          >
-            <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gold/90 text-gold-foreground text-xs font-bold">
-              <Award className="h-3.5 w-3.5" />
-              Featured
-            </span>
-          </motion.div>
-        )}
-
-        {/* Title overlay */}
-        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12">
-          <div className="container mx-auto">
+        {/* Hero content */}
+        <div className="absolute inset-x-0 bottom-0 px-6 md:px-12 pb-16 md:pb-20">
+          <div className="container mx-auto max-w-5xl">
+            {/* Badges row */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
+              transition={{ delay: 0.3, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="flex items-center gap-2 flex-wrap mb-5"
             >
-              <div className="flex items-center gap-3 mb-3">
-                <span className={`px-3 py-1 rounded-full text-xs font-semibold glass ${venue.isOpen ? 'text-sage' : 'text-destructive'}`}>
-                  {venue.isOpen ? t.venues.open : t.venues.closed}
-                </span>
-                <span className="px-3 py-1 rounded-full text-xs font-semibold glass text-foreground">
-                  {venue.cuisine}
-                </span>
-                {venue.priceRange && (
-                  <span className="px-3 py-1 rounded-full glass">
-                    <PriceRange level={venue.priceRange} />
-                  </span>
+              <span
+                className={cn(
+                  'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-md border',
+                  venue.isOpen
+                    ? 'bg-sage/20 text-sage border-sage/30'
+                    : 'bg-destructive/20 text-destructive border-destructive/30',
                 )}
-              </div>
-              <h1 className="font-display text-4xl md:text-6xl font-bold text-foreground leading-tight">
-                {venue.name}
-              </h1>
-              <div className="flex items-center gap-4 mt-3">
-                <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-gold/10">
-                  <Star className="h-4 w-4 text-gold fill-gold" />
-                  <span className="font-bold text-foreground">{venue.rating}</span>
-                  <span className="text-sm text-muted-foreground">({venue.reviewCount})</span>
-                </div>
-                <span className="text-sm text-muted-foreground flex items-center gap-1">
-                  <MapPin className="h-3.5 w-3.5" /> {venue.neighborhood}
+              >
+                <span
+                  className={cn(
+                    'h-1.5 w-1.5 rounded-full',
+                    venue.isOpen ? 'bg-sage animate-pulse' : 'bg-destructive',
+                  )}
+                />
+                {venue.isOpen ? t.venues.open : t.venues.closed}
+              </span>
+              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-background/70 backdrop-blur-md border border-border text-foreground">
+                {venue.cuisine}
+              </span>
+              {venue.priceRange && (
+                <span className="px-3 py-1 rounded-full bg-background/70 backdrop-blur-md border border-border">
+                  <PriceRange level={venue.priceRange} />
                 </span>
-              </div>
+              )}
+              {venue.featured && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-gold text-gold-foreground shadow-md">
+                  <Award className="h-3.5 w-3.5" />
+                  Featured
+                </span>
+              )}
+            </motion.div>
+
+            {/* Title */}
+            <motion.h1
+              layoutId={`venue-title-${venue.id}`}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              className="font-display text-5xl md:text-7xl lg:text-8xl font-bold text-foreground leading-[1.05] tracking-tight"
+            >
+              {venue.name}
+            </motion.h1>
+
+            {/* Meta */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 0.5 }}
+              className="flex items-center gap-5 mt-5 flex-wrap"
+            >
+              <motion.div
+                layoutId={`venue-rating-${venue.id}`}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gold/15 border border-gold/25"
+              >
+                <Star className="h-4 w-4 text-gold fill-gold" />
+                <span className="font-display font-bold text-foreground">{venue.rating.toFixed(1)}</span>
+                <span className="text-sm text-muted-foreground">({venue.reviewCount})</span>
+              </motion.div>
+              <span className="text-sm text-foreground/80 inline-flex items-center gap-1.5">
+                <MapPin className="h-4 w-4" />
+                {venue.neighborhood}
+              </span>
+              <span className="text-sm text-foreground/80 inline-flex items-center gap-1.5">
+                <Clock className="h-4 w-4" />
+                {venue.hours}
+              </span>
             </motion.div>
           </div>
         </div>
-      </div>
 
-      {/* Content */}
-      <div className="container mx-auto px-4 py-10">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        {/* Scroll hint */}
+        <motion.div
+          style={{ opacity: scrollHintOpacity }}
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 pointer-events-none"
+        >
+          <motion.div
+            animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+            className="flex flex-col items-center gap-1 text-muted-foreground"
+          >
+            <span className="text-[10px] font-semibold uppercase tracking-widest">Scroll</span>
+            <ChevronDown className="h-4 w-4" />
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* === CONTENT === */}
+      <div className="container mx-auto px-4 md:px-6 py-10 md:py-14 max-w-7xl">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-14">
           {/* Main column */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="lg:col-span-2 space-y-8"
+            transition={{ delay: 0.4 }}
+            className="lg:col-span-2 space-y-12"
           >
-            {/* Action buttons */}
-            <div className="flex gap-3">
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={handleToggleFav}
-                className={`flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-sm transition-all ${
-                  isFavorite(venue.id) ? 'bg-primary/10 border border-primary/30 text-primary' : 'glass text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                <Heart className={`h-4 w-4 ${isFavorite(venue.id) ? 'fill-primary' : ''}`} />
-                {t.detail.favorite}
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => share(venue)}
-                className="flex items-center gap-2 px-5 py-3 rounded-xl glass text-muted-foreground hover:text-foreground font-medium text-sm"
-              >
-                <Share2 className="h-4 w-4" />
-                {t.detail.share}
-              </motion.button>
-              <motion.a
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                href={directionsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-5 py-3 rounded-xl bg-primary text-primary-foreground font-medium text-sm shine"
-              >
-                <Navigation className="h-4 w-4" />
-                {t.detail.directions}
-              </motion.a>
-            </div>
-
             {/* Description */}
-            <div className="glass-strong rounded-2xl p-6">
-              <h2 className="font-display text-xl font-bold text-foreground mb-3">{t.detail.description}</h2>
-              <p className="text-foreground leading-relaxed">{venue.description}</p>
-            </div>
+            <section>
+              <h2 className="font-display text-2xl font-bold text-foreground mb-3">
+                {t.detail.description}
+              </h2>
+              <p className="text-foreground/85 leading-relaxed text-[15px]">
+                {venue.description}
+              </p>
+            </section>
 
-            {/* Image gallery */}
-            {allImages.length > 1 && (
-              <div>
-                <h2 className="font-display text-xl font-bold text-foreground mb-4">Galería</h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {allImages.map((img, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.05 }}
-                      className="aspect-[4/3] rounded-xl overflow-hidden"
-                    >
-                      <img src={img} alt={`${venue.name} ${i + 1}`} className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" />
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
+            {/* Gallery */}
+            {allImages.length > 0 && (
+              <section>
+                <h2 className="font-display text-2xl font-bold text-foreground mb-5">
+                  {locale === 'es' ? 'Galería' : 'Gallery'}
+                </h2>
+                <VenueGallery images={allImages} venueName={venue.name} />
+              </section>
             )}
 
             {/* Reviews */}
             {venue.reviews && venue.reviews.length > 0 && (
-              <div>
-                <h2 className="font-display text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                  <MessageCircle className="h-5 w-5 text-primary" />
-                  {t.detail.reviews}
-                </h2>
-                <div className="space-y-3">
-                  {venue.reviews.map(r => (
-                    <motion.div
-                      key={r.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      className="glass-strong rounded-xl p-5"
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="font-medium text-foreground">{platformIcons[r.platform]} {r.author}</span>
-                        <div className="flex items-center gap-1">
-                          {Array.from({ length: r.rating }).map((_, i) => (
-                            <Star key={i} className="h-3.5 w-3.5 text-gold fill-gold" />
-                          ))}
-                        </div>
-                      </div>
-                      <p className="text-muted-foreground leading-relaxed">{r.content}</p>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
+              <VenueReviews reviews={venue.reviews} title={t.detail.reviews} />
             )}
           </motion.div>
 
@@ -261,68 +258,156 @@ export default function VenuePage() {
           <motion.aside
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="space-y-4"
+            transition={{ delay: 0.5 }}
+            className="lg:sticky lg:top-24 lg:self-start"
           >
-            <div className="glass-strong rounded-2xl p-5 space-y-4 sticky top-24">
-              <div className="flex items-start gap-3 p-3 rounded-xl bg-muted/30">
-                <MapPin className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">{t.detail.address}</p>
-                  <p className="text-sm text-foreground">{venue.address}</p>
+            <div className="rounded-2xl bg-card/95 backdrop-blur-sm border border-border shadow-xl overflow-hidden">
+              {/* Primary CTA */}
+              <div className="p-5 border-b border-border/60">
+                <a
+                  href={directionsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative w-full inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl bg-primary text-primary-foreground font-semibold text-sm shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background overflow-hidden"
+                >
+                  <span
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-background/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"
+                    aria-hidden
+                  />
+                  <Navigation className="h-4 w-4 relative" />
+                  <span className="relative">{t.detail.directions}</span>
+                </a>
+                <div className="grid grid-cols-2 gap-2 mt-3">
+                  <button
+                    onClick={handleToggleFav}
+                    aria-pressed={fav}
+                    className={cn(
+                      'inline-flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+                      fav
+                        ? 'bg-primary/10 text-primary border-primary/30'
+                        : 'bg-background text-foreground border-border hover:bg-muted',
+                    )}
+                  >
+                    <Heart className={cn('h-4 w-4', fav && 'fill-primary')} />
+                    {t.detail.favorite}
+                  </button>
+                  <button
+                    onClick={() => share(venue)}
+                    className="inline-flex items-center justify-center gap-2 py-2.5 rounded-xl bg-background border border-border text-foreground hover:bg-muted text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  >
+                    <Share2 className="h-4 w-4" />
+                    {t.detail.share}
+                  </button>
                 </div>
               </div>
-              <div className="flex items-start gap-3 p-3 rounded-xl bg-muted/30">
-                <Clock className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">{t.detail.hours}</p>
-                  <p className="text-sm text-foreground">{venue.hours}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3 p-3 rounded-xl bg-muted/30">
-                <Tag className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">{t.detail.cuisine}</p>
-                  <p className="text-sm text-foreground">{venue.cuisine}</p>
-                </div>
-              </div>
-              {venue.priceRange && (
-                <div className="flex items-start gap-3 p-3 rounded-xl bg-muted/30">
-                  <DollarSign className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Precio</p>
-                    <PriceRange level={venue.priceRange} />
+
+              {/* Info group */}
+              <dl className="divide-y divide-border/60">
+                <div className="p-5 flex items-start gap-3">
+                  <span className="h-9 w-9 rounded-lg bg-primary/10 inline-flex items-center justify-center flex-shrink-0">
+                    <MapPin className="h-4 w-4 text-primary" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <dt className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider">
+                      {t.detail.address}
+                    </dt>
+                    <dd className="text-sm text-foreground mt-0.5">{venue.address}</dd>
+                    <a
+                      href={mapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs text-primary font-medium hover:underline mt-1.5"
+                    >
+                      Ver en mapa →
+                    </a>
                   </div>
                 </div>
-              )}
-              {venue.reservationInfo && (
-                <div className="p-3 rounded-xl bg-accent/10 border border-accent/20 text-sm text-accent-foreground">
-                  <span className="font-medium">{t.detail.reservation}:</span> {venue.reservationInfo}
-                </div>
-              )}
-              {venue.tags && venue.tags.length > 0 && (
-                <div>
-                  <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">{t.detail.tags}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {venue.tags.map(tag => (
-                      <span key={tag} className="px-2.5 py-1 text-xs rounded-full bg-muted text-muted-foreground">{tag}</span>
-                    ))}
+
+                <div className="p-5 flex items-start gap-3">
+                  <span className="h-9 w-9 rounded-lg bg-primary/10 inline-flex items-center justify-center flex-shrink-0">
+                    <Clock className="h-4 w-4 text-primary" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <dt className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider">
+                      {t.detail.hours}
+                    </dt>
+                    <dd className="text-sm text-foreground mt-0.5">{venue.hours}</dd>
+                    <span
+                      className={cn(
+                        'inline-flex items-center gap-1.5 mt-1.5 text-xs font-semibold',
+                        venue.isOpen ? 'text-sage' : 'text-destructive',
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          'h-1.5 w-1.5 rounded-full',
+                          venue.isOpen ? 'bg-sage animate-pulse' : 'bg-destructive',
+                        )}
+                      />
+                      {venue.isOpen ? t.venues.open : t.venues.closed}
+                    </span>
                   </div>
                 </div>
-              )}
+
+                {venue.priceRange && (
+                  <div className="p-5 flex items-start gap-3">
+                    <span className="h-9 w-9 rounded-lg bg-primary/10 inline-flex items-center justify-center flex-shrink-0">
+                      <DollarSign className="h-4 w-4 text-primary" />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <dt className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider">
+                        {locale === 'es' ? 'Precio' : 'Price'}
+                      </dt>
+                      <dd className="mt-1"><PriceRange level={venue.priceRange} /></dd>
+                    </div>
+                  </div>
+                )}
+
+                {venue.reservationInfo && (
+                  <div className="p-5 flex items-start gap-3">
+                    <span className="h-9 w-9 rounded-lg bg-accent/15 inline-flex items-center justify-center flex-shrink-0">
+                      <Calendar className="h-4 w-4 text-accent-foreground" />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <dt className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider">
+                        {t.detail.reservation}
+                      </dt>
+                      <dd className="text-sm text-foreground mt-0.5">{venue.reservationInfo}</dd>
+                    </div>
+                  </div>
+                )}
+
+                {venue.tags && venue.tags.length > 0 && (
+                  <div className="p-5">
+                    <dt className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+                      <Tag className="h-3 w-3" /> {t.detail.tags}
+                    </dt>
+                    <dd className="flex flex-wrap gap-1.5">
+                      {venue.tags.map(tag => (
+                        <span
+                          key={tag}
+                          className="px-2.5 py-1 text-xs rounded-full bg-muted text-muted-foreground border border-border/40"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </dd>
+                  </div>
+                )}
+              </dl>
             </div>
           </motion.aside>
         </div>
 
         {/* Similar venues */}
         {similar.length > 0 && (
-          <motion.div
+          <motion.section
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mt-16"
+            className="mt-20"
           >
-            <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-6">
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-8 tracking-tight">
               {locale === 'es' ? 'También te puede gustar' : 'You might also like'}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -339,7 +424,7 @@ export default function VenuePage() {
                 />
               ))}
             </div>
-          </motion.div>
+          </motion.section>
         )}
       </div>
 

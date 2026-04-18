@@ -61,9 +61,13 @@ function FeaturedBadge() {
   );
 }
 
-function RatingPill({ rating, reviewCount }: { rating: number; reviewCount?: number }) {
+function RatingPill({ rating, reviewCount, layoutId }: { rating: number; reviewCount?: number; layoutId?: string }) {
   return (
-    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-foreground/5 border border-foreground/5">
+    <motion.span
+      layoutId={layoutId}
+      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-foreground/5 border border-foreground/5"
+    >
       <Star className="h-3.5 w-3.5 text-gold fill-gold" aria-hidden />
       <span className="text-sm font-bold text-foreground leading-none">{rating.toFixed(1)}</span>
       {reviewCount !== undefined && (
@@ -71,7 +75,7 @@ function RatingPill({ rating, reviewCount }: { rating: number; reviewCount?: num
           ({reviewCount})
         </span>
       )}
-    </span>
+    </motion.span>
   );
 }
 
@@ -231,7 +235,9 @@ export default function VenueCard({
       >
         {/* Image */}
         <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-          <img
+          <motion.img
+            layoutId={`venue-image-${venue.id}`}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             src={venue.imageUrl}
             alt=""
             className="h-full w-full object-cover transition-transform duration-[700ms] ease-out group-hover:scale-[1.04]"
@@ -254,10 +260,18 @@ export default function VenueCard({
         {/* Content */}
         <div className="flex flex-col flex-1 p-4 sm:p-5 gap-2.5">
           <div className="flex items-start justify-between gap-3">
-            <h3 className="font-display font-bold text-foreground text-[17px] sm:text-lg leading-snug tracking-tight line-clamp-1">
+            <motion.h3
+              layoutId={`venue-title-${venue.id}`}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="font-display font-bold text-foreground text-[17px] sm:text-lg leading-snug tracking-tight line-clamp-1"
+            >
               {venue.name}
-            </h3>
-            <RatingPill rating={venue.rating} reviewCount={venue.reviewCount} />
+            </motion.h3>
+            <RatingPill
+              rating={venue.rating}
+              reviewCount={venue.reviewCount}
+              layoutId={`venue-rating-${venue.id}`}
+            />
           </div>
 
           <div className="flex items-center gap-1.5 text-[13px] text-muted-foreground">
