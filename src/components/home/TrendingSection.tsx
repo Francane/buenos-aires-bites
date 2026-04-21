@@ -1,7 +1,10 @@
 import { useRef } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight, TrendingUp, Star, MapPin } from 'lucide-react';
+import { ChevronLeft, ChevronRight, TrendingUp } from 'lucide-react';
 import { useLocale } from '@/i18n/LocaleProvider';
+import { useFavorites } from '@/hooks/useFavorites';
+import { toast } from 'sonner';
+import VenueCard from '@/components/venues/VenueCard';
 import type { Venue } from '@/types/venue';
 
 interface TrendingSectionProps {
@@ -10,15 +13,21 @@ interface TrendingSectionProps {
 }
 
 export default function TrendingSection({ venues, onSelectVenue }: TrendingSectionProps) {
-  const { locale } = useLocale();
+  const { locale, t } = useLocale();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const trending = [...venues].sort((a, b) => b.rating - a.rating).slice(0, 8);
 
   const scroll = (dir: 'left' | 'right') => {
     if (!scrollRef.current) return;
-    const amount = 320;
+    const amount = 340;
     scrollRef.current.scrollBy({ left: dir === 'left' ? -amount : amount, behavior: 'smooth' });
+  };
+
+  const handleToggleFavorite = (id: string) => {
+    const added = toggleFavorite(id);
+    toast.success(added ? t.toast.favAdded : t.toast.favRemoved);
   };
 
   return (
@@ -63,54 +72,22 @@ export default function TrendingSection({ venues, onSelectVenue }: TrendingSecti
 
         <div
           ref={scrollRef}
-          className="flex gap-5 overflow-x-auto scrollbar-hide pb-4 -mx-4 px-4 snap-x snap-mandatory"
+          className="flex gap-6 overflow-x-auto scrollbar-hide pb-4 -mx-4 px-4 snap-x snap-mandatory"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {trending.map((venue, i) => (
-            <motion.div
+          {trending.map(venue => (
+            <div
               key={venue.id}
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.05 }}
-              onClick={() => onSelectVenue(venue)}
-              className="flex-shrink-0 w-[280px] sm:w-[300px] snap-start cursor-pointer group"
+              className="flex-shrink-0 w-[280px] sm:w-[320px] snap-start flex"
             >
-              <div className="relative overflow-hidden rounded-2xl glass-strong hover-lift">
-                <div className="relative aspect-[3/2] overflow-hidden">
-                  <img
-                    src={venue.imageUrl}
-                    alt={venue.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent" />
-                  <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full glass text-xs font-bold text-primary-foreground">
-                    <Star className="h-3 w-3 fill-gold text-gold" />
-                    {venue.rating}
-                  </div>
-                  <div className="absolute bottom-3 left-3 right-3">
-                    <h3 className="font-display font-bold text-lg text-primary-foreground leading-tight drop-shadow-lg">
-                      {venue.name}
-                    </h3>
-                    <p className="text-xs text-primary-foreground/80 mt-0.5 flex items-center gap-1">
-                      <MapPin className="h-3 w-3" /> {venue.neighborhood}
-                    </p>
-                  </div>
-                </div>
-                <div className="p-4">
-                  <p className="text-sm text-muted-foreground line-clamp-2">{venue.description}</p>
-                  <div className="flex items-center gap-2 mt-3">
-                    <span className="px-2.5 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-medium">
-                      {venue.cuisine}
-                    </span>
-                    <span className={`text-xs font-medium ${venue.isOpen ? 'text-sage' : 'text-destructive'}`}>
-                      {venue.isOpen ? '● Open' : '● Closed'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+              <VenueCard
+                venue={venue}
+                isFavorite={isFavorite(venue.id)}
+                onToggleFavorite={handleToggleFavorite}
+                onSelect={onSelectVenue}
+                layout="grid"
+              />
+            </div>
           ))}
         </div>
       </div>
