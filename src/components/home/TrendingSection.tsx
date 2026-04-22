@@ -41,9 +41,13 @@ export default function TrendingSection({ venues, onSelectVenue }: TrendingSecti
         >
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <div className="p-1.5 rounded-lg bg-primary/10">
+              <motion.div
+                animate={{ y: [0, -3, 0] }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                className="p-1.5 rounded-lg bg-gradient-to-br from-primary/15 to-accent/15 ring-1 ring-primary/10"
+              >
                 <TrendingUp className="h-4 w-4 text-primary" />
-              </div>
+              </motion.div>
               <span className="text-sm font-semibold text-primary uppercase tracking-wider">
                 {locale === 'es' ? 'Trending' : 'Trending'}
               </span>
