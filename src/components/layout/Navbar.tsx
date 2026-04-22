@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Menu, X, Search, Heart, MapPin, Plus, Moon, Sun } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useLocale } from '@/i18n/LocaleProvider';
 import { useDarkMode } from '@/hooks/useDarkMode';
 import { Button } from '@/components/ui/button';
@@ -16,6 +17,10 @@ const sections = ['inicio', 'explorar', 'categorias', 'favoritos'] as const;
 export default function Navbar({ favCount, onSearchOpen, onAddPlace }: NavbarProps) {
   const { t, locale, setLocale } = useLocale();
   const { isDark, toggle: toggleDark } = useDarkMode();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isHome = location.pathname === '/';
+
   const [scrollProgress, setScrollProgress] = useState(0);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('inicio');
@@ -34,6 +39,7 @@ export default function Navbar({ favCount, onSearchOpen, onAddPlace }: NavbarPro
       setScrollProgress(total > 0 ? (window.scrollY / total) * 100 : 0);
       setScrolled(window.scrollY > 20);
 
+      if (!isHome) return;
       for (const id of [...sections].reverse()) {
         const el = document.getElementById(id);
         if (el && el.getBoundingClientRect().top <= 120) {
@@ -43,19 +49,43 @@ export default function Navbar({ favCount, onSearchOpen, onAddPlace }: NavbarPro
       }
     };
     window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [isHome]);
 
-  const scrollTo = useCallback((id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  const goToSection = useCallback((id: string) => {
     setMobileOpen(false);
-  }, []);
+    if (!isHome) {
+      navigate(id === 'inicio' ? '/' : `/#${id}`);
+      // Defer scroll until home mounts
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+        }, 60);
+      });
+      return;
+    }
+    if (id === 'inicio') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [isHome, navigate]);
+
+  const goHome = useCallback(() => {
+    if (isHome) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      navigate('/');
+    }
+    setMobileOpen(false);
+  }, [isHome, navigate]);
 
   return (
     <header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'glass-strong shadow-sm' : 'bg-background/60 backdrop-blur-md'} border-b border-border/50`}>
       <div className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-primary via-accent to-primary transition-all duration-150" style={{ width: `${scrollProgress}%` }} />
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
-        <button onClick={() => scrollTo('inicio')} className="flex items-center gap-2.5 font-display text-xl font-bold text-foreground group">
+        <button onClick={goHome} className="flex items-center gap-2.5 font-display text-xl font-bold text-foreground group" aria-label="WeEat — Home">
           <div className="p-1.5 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
             <MapPin className="h-4 w-4 text-primary" />
           </div>
@@ -63,30 +93,33 @@ export default function Navbar({ favCount, onSearchOpen, onAddPlace }: NavbarPro
         </button>
 
         <nav className="hidden md:flex items-center gap-1">
-          {sections.map(s => (
-            <button
-              key={s}
-              onClick={() => scrollTo(s)}
-              className={`relative px-3 py-2 text-sm font-medium rounded-lg transition-colors ${activeSection === s ? 'text-primary' : 'text-muted-foreground hover:text-foreground'}`}
-            >
-              {navLabels[s]}
-              {activeSection === s && (
-                <motion.div
-                  layoutId="nav-indicator"
-                  className="absolute inset-0 rounded-lg bg-primary/10"
-                  style={{ zIndex: -1 }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                />
-              )}
-            </button>
-          ))}
+          {sections.map(s => {
+            const isActive = isHome && activeSection === s;
+            return (
+              <button
+                key={s}
+                onClick={() => goToSection(s)}
+                className={`relative px-3 py-2 text-sm font-medium rounded-lg transition-colors ${isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+              >
+                {navLabels[s]}
+                {isActive && (
+                  <motion.div
+                    layoutId="nav-indicator"
+                    className="absolute inset-0 rounded-lg bg-primary/10"
+                    style={{ zIndex: -1 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                  />
+                )}
+              </button>
+            );
+          })}
         </nav>
 
         <div className="flex items-center gap-1.5">
           <button onClick={onSearchOpen} className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors" aria-label={t.nav.search}>
             <Search className="h-5 w-5" />
           </button>
-          <button onClick={() => scrollTo('favoritos')} className="relative p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors" aria-label={t.nav.favorites}>
+          <button onClick={() => goToSection('favoritos')} className="relative p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors" aria-label={t.nav.favorites}>
             <Heart className="h-5 w-5" />
             <AnimatePresence>
               {favCount > 0 && (
@@ -124,7 +157,8 @@ export default function Navbar({ favCount, onSearchOpen, onAddPlace }: NavbarPro
           </Button>
           <button
             onClick={() => setLocale(locale === 'es' ? 'en' : 'es')}
-            className="px-2.5 py-1.5 text-xs font-bold rounded-lg glass text-muted-foreground hover:text-foreground transition-colors"
+            className="px-2.5 py-1.5 text-xs font-bold rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+            aria-label="Toggle language"
           >
             {t.nav.language}
           </button>
@@ -143,15 +177,18 @@ export default function Navbar({ favCount, onSearchOpen, onAddPlace }: NavbarPro
             className="md:hidden border-t border-border/50 overflow-hidden glass"
           >
             <nav className="flex flex-col p-4 gap-1">
-              {sections.map(s => (
-                <button
-                  key={s}
-                  onClick={() => scrollTo(s)}
-                  className={`px-3 py-2.5 text-sm font-medium rounded-lg text-left transition-colors ${activeSection === s ? 'text-primary bg-primary/10' : 'text-muted-foreground'}`}
-                >
-                  {navLabels[s]}
-                </button>
-              ))}
+              {sections.map(s => {
+                const isActive = isHome && activeSection === s;
+                return (
+                  <button
+                    key={s}
+                    onClick={() => goToSection(s)}
+                    className={`px-3 py-2.5 text-sm font-medium rounded-lg text-left transition-colors ${isActive ? 'text-primary bg-primary/10' : 'text-muted-foreground'}`}
+                  >
+                    {navLabels[s]}
+                  </button>
+                );
+              })}
               <Button size="sm" onClick={() => { onAddPlace(); setMobileOpen(false); }} className="mt-2 gap-1">
                 <Plus className="h-4 w-4" /> {t.nav.addPlace}
               </Button>
