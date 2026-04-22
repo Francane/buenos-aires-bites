@@ -1,9 +1,9 @@
 import { useState, useMemo, useCallback, Suspense, lazy } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { venues as allVenues } from '@/data/venues';
 import { useLocale } from '@/i18n/LocaleProvider';
 import { useFavorites } from '@/hooks/useFavorites';
-import { useShare } from '@/hooks/useShare';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import type { Venue } from '@/types/venue';
 
@@ -18,7 +18,6 @@ import CategoryPills from '@/components/home/CategoryPills';
 import TestimonialsSection from '@/components/home/TestimonialsSection';
 import NewsletterSection from '@/components/home/NewsletterSection';
 import VenueGrid from '@/components/venues/VenueGrid';
-import VenueDetail from '@/components/venues/VenueDetail';
 import FavoritesSection from '@/components/favorites/FavoritesSection';
 import SearchModal from '@/components/search/SearchModal';
 import GeoBanner from '@/components/geo/GeoBanner';
@@ -45,14 +44,12 @@ function MapFallback() {
 
 export default function Index() {
   const { t } = useLocale();
+  const navigate = useNavigate();
   const { favorites, isFavorite, toggleFavorite } = useFavorites();
-  const { share } = useShare();
   const geo = useGeolocation();
 
   const [searchOpen, setSearchOpen] = useState(false);
-  const [selectedVenue, setSelectedVenue] = useState<Venue | null>(null);
-  const [detailOpen, setDetailOpen] = useState(false);
-  const [focusVenueId, setFocusVenueId] = useState<string | null>(null);
+  const [focusVenueId] = useState<string | null>(null);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchNeighborhood, setSearchNeighborhood] = useState('');
@@ -81,9 +78,8 @@ export default function Index() {
   }, []);
 
   const handleSelectVenue = useCallback((venue: Venue) => {
-    setSelectedVenue(venue);
-    setDetailOpen(true);
-  }, []);
+    navigate(`/venue/${venue.id}`);
+  }, [navigate]);
 
   const handleToggleFavorite = useCallback((id: string) => {
     const added = toggleFavorite(id);
@@ -99,13 +95,8 @@ export default function Index() {
   }, []);
 
   const handleAddPlace = useCallback(() => {
-    window.location.href = '/agregar-lugar';
-  }, []);
-
-  const handleMapSelect = useCallback((venue: Venue) => {
-    setSelectedVenue(venue);
-    setDetailOpen(true);
-  }, []);
+    navigate('/agregar-lugar');
+  }, [navigate]);
 
   const handleCategorySelect = useCallback((cuisine: string) => {
     setSearchCuisine(cuisine);
@@ -131,7 +122,7 @@ export default function Index() {
 
       <ErrorBoundary fallback={<MapFallback />}>
         <Suspense fallback={<div className="container mx-auto px-4 py-16"><SkeletonLoader count={1} /></div>}>
-          <MapSection venues={allVenues} onSelectVenue={handleMapSelect} focusVenueId={focusVenueId} />
+          <MapSection venues={allVenues} onSelectVenue={handleSelectVenue} focusVenueId={focusVenueId} />
         </Suspense>
       </ErrorBoundary>
 
@@ -154,15 +145,6 @@ export default function Index() {
       <NewsletterSection />
 
       <Footer />
-
-      <VenueDetail
-        venue={selectedVenue}
-        open={detailOpen}
-        onClose={() => setDetailOpen(false)}
-        isFavorite={selectedVenue ? isFavorite(selectedVenue.id) : false}
-        onToggleFavorite={handleToggleFavorite}
-        onShare={share}
-      />
 
       <SearchModal
         open={searchOpen}
