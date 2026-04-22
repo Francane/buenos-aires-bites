@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Sparkles } from 'lucide-react';
 import { useLocale } from '@/i18n/LocaleProvider';
+import Magnetic from '@/components/ui/Magnetic';
 
 interface HeroSectionProps {
   onExplore: () => void;
@@ -48,12 +49,17 @@ export default function HeroSection({ onExplore, onFavorites }: HeroSectionProps
 
       <div className="container mx-auto px-4 text-center relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-sm font-medium text-muted-foreground mb-8"
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ delay: 0.1, type: 'spring', stiffness: 200, damping: 20 }}
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-sm font-medium text-muted-foreground mb-8 sheen-on-hover"
         >
-          <Sparkles className="h-4 w-4 text-accent" />
+          <motion.span
+            animate={{ rotate: [0, 15, -10, 0], scale: [1, 1.15, 1] }}
+            transition={{ duration: 3, repeat: Infinity, repeatDelay: 1.5 }}
+          >
+            <Sparkles className="h-4 w-4 text-accent" />
+          </motion.span>
           <span>{t.hero.subtitle.split('.')[0]}</span>
         </motion.div>
 
@@ -72,7 +78,7 @@ export default function HeroSection({ onExplore, onFavorites }: HeroSectionProps
                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                 exit={{ opacity: 0, y: -30, filter: 'blur(8px)' }}
                 transition={{ duration: 0.5 }}
-                className="gradient-text inline-block"
+                className="text-gradient-animated inline-block"
               >
                 {words[wordIdx]}
               </motion.span>
@@ -95,19 +101,25 @@ export default function HeroSection({ onExplore, onFavorites }: HeroSectionProps
           transition={{ delay: 0.6, duration: 0.5 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12"
         >
-          <button
-            onClick={onExplore}
-            className="group relative px-8 py-3.5 rounded-xl bg-primary text-primary-foreground font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 shine overflow-hidden"
-          >
-            <span className="relative z-10">{t.hero.cta}</span>
-            <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </button>
-          <button
-            onClick={onFavorites}
-            className="px-8 py-3.5 rounded-xl glass font-semibold text-lg text-foreground hover:-translate-y-0.5 transition-all duration-300"
-          >
+          <Magnetic as="button" onClick={onExplore} strength={0.25} className="group relative px-8 py-3.5 rounded-xl bg-primary text-primary-foreground font-semibold text-lg ring-glow hover:shadow-2xl transition-shadow duration-300 sheen-on-hover overflow-hidden">
+            <span className="relative z-10 flex items-center gap-2">
+              {t.hero.cta}
+              <motion.span
+                animate={{ x: [0, 4, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+                className="inline-block"
+              >
+                →
+              </motion.span>
+            </span>
+            <div
+              className="absolute inset-0 bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_100%] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              style={{ animation: 'gradient-pan 3s ease infinite' }}
+            />
+          </Magnetic>
+          <Magnetic as="button" onClick={onFavorites} strength={0.2} className="px-8 py-3.5 rounded-xl glass-strong font-semibold text-lg text-foreground hover:border-primary/40 transition-colors duration-300">
             {t.hero.ctaFav}
-          </button>
+          </Magnetic>
         </motion.div>
 
         <motion.div
