@@ -86,28 +86,47 @@ export default function TestimonialsSection() {
         </motion.div>
 
         <div className="max-w-3xl mx-auto relative">
-          <div className="glass-strong rounded-3xl p-8 md:p-12 min-h-[280px] flex items-center">
+          {/* glow halo */}
+          <div className="absolute -inset-6 bg-gradient-to-br from-primary/20 via-accent/10 to-wine/10 blur-3xl rounded-full opacity-60 pointer-events-none" />
+
+          <div className="relative glass-strong rounded-3xl p-8 md:p-12 min-h-[280px] flex items-center overflow-hidden">
+            {/* corner quote watermark */}
+            <Quote className="absolute -top-4 -left-2 h-32 w-32 text-primary/5 rotate-180" />
+            <Quote className="absolute -bottom-4 -right-2 h-32 w-32 text-primary/5" />
+
             <AnimatePresence mode="wait">
               <motion.div
                 key={current}
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -30 }}
-                transition={{ duration: 0.4 }}
-                className="text-center w-full"
+                initial={{ opacity: 0, x: 30, filter: 'blur(6px)' }}
+                animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+                exit={{ opacity: 0, x: -30, filter: 'blur(6px)' }}
+                transition={{ duration: 0.5 }}
+                className="text-center w-full relative"
               >
                 <div className="flex justify-center gap-1 mb-6">
                   {Array.from({ length: testimonials[current].rating }).map((_, i) => (
-                    <Star key={i} className="h-5 w-5 text-gold fill-gold" />
+                    <motion.div
+                      key={i}
+                      initial={{ scale: 0, rotate: -180 }}
+                      animate={{ scale: 1, rotate: 0 }}
+                      transition={{ delay: i * 0.07, type: 'spring', stiffness: 260 }}
+                    >
+                      <Star className="h-5 w-5 text-gold fill-gold" />
+                    </motion.div>
                   ))}
                 </div>
                 <p className="text-lg md:text-xl text-foreground leading-relaxed font-body italic">
                   "{testimonials[current].content[locale]}"
                 </p>
                 <div className="mt-8 flex items-center justify-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground font-bold text-sm">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.3, type: 'spring' }}
+                    className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground font-bold text-sm ring-2 ring-background shadow-lg"
+                  >
                     {testimonials[current].avatar}
-                  </div>
+                  </motion.div>
                   <div className="text-left">
                     <p className="font-semibold text-foreground">{testimonials[current].author}</p>
                     <p className="text-sm text-muted-foreground">{testimonials[current].role[locale]}</p>

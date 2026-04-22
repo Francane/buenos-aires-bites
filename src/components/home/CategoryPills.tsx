@@ -46,17 +46,24 @@ export default function CategoryPills({ onSelectCuisine }: CategoryPillsProps) {
             return (
               <motion.button
                 key={cuisine}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.03 }}
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
+                transition={{ delay: i * 0.04, type: 'spring', stiffness: 260, damping: 20 }}
+                whileHover={{ scale: 1.06, y: -3 }}
+                whileTap={{ scale: 0.94 }}
                 onClick={() => onSelectCuisine(cuisine)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-strong text-sm font-medium text-foreground hover:text-primary hover:border-primary/30 transition-colors"
+                className="group relative inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass-strong text-sm font-medium text-foreground hover:text-primary-foreground transition-colors overflow-hidden sheen-on-hover"
               >
-                <Icon className="h-4 w-4" />
-                {cuisine}
+                <span className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <motion.span
+                  className="relative z-10"
+                  whileHover={{ rotate: [0, -15, 15, 0] }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <Icon className="h-4 w-4" />
+                </motion.span>
+                <span className="relative z-10">{cuisine}</span>
               </motion.button>
             );
           })}
