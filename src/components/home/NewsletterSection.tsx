@@ -23,10 +23,28 @@ export default function NewsletterSection() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative rounded-3xl overflow-hidden"
+          className="relative rounded-3xl overflow-hidden ring-1 ring-primary/20"
         >
-          {/* Gradient background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/90 to-accent" />
+          {/* Animated gradient background */}
+          <div
+            className="absolute inset-0 bg-gradient-to-br from-primary via-primary/90 to-accent bg-[length:200%_200%]"
+            style={{ animation: 'gradient-pan 12s ease infinite' }}
+          />
+          {/* Floating internal orbs */}
+          <div
+            className="absolute -top-20 -left-20 w-64 h-64 rounded-full blur-3xl opacity-30"
+            style={{
+              background: 'radial-gradient(circle, hsl(var(--primary-foreground) / 0.6), transparent 70%)',
+              animation: 'orb-float-1 14s ease-in-out infinite',
+            }}
+          />
+          <div
+            className="absolute -bottom-24 -right-16 w-72 h-72 rounded-full blur-3xl opacity-30"
+            style={{
+              background: 'radial-gradient(circle, hsl(var(--accent) / 0.7), transparent 70%)',
+              animation: 'orb-float-2 18s ease-in-out infinite',
+            }}
+          />
           <div
             className="absolute inset-0 opacity-10"
             style={{
@@ -36,11 +54,12 @@ export default function NewsletterSection() {
 
           <div className="relative px-8 py-16 md:px-16 md:py-20 text-center">
             <motion.div
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
+              initial={{ scale: 0, rotate: -180 }}
+              whileInView={{ scale: 1, rotate: 0 }}
               viewport={{ once: true }}
-              transition={{ type: 'spring', stiffness: 200 }}
-              className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-foreground/20 backdrop-blur-sm mb-6"
+              transition={{ type: 'spring', stiffness: 200, delay: 0.1 }}
+              whileHover={{ rotate: 360, transition: { duration: 0.8 } }}
+              className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-foreground/20 backdrop-blur-sm mb-6 ring-1 ring-primary-foreground/30"
             >
               <Sparkles className="h-8 w-8 text-primary-foreground" />
             </motion.div>

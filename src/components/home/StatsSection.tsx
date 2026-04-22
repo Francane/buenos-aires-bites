@@ -70,17 +70,26 @@ function StatCard({ stat, delay }: { stat: { icon: typeof MapPin; value: number;
       ref={ref}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -6, transition: { type: 'spring', stiffness: 300, damping: 18 } }}
       viewport={{ once: true }}
       transition={{ delay, duration: 0.5 }}
-      className="glass-strong rounded-2xl p-6 text-center hover-lift cursor-default"
+      className="group relative glass-strong rounded-2xl p-6 text-center cursor-default sheen-on-hover overflow-hidden"
     >
-      <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 mb-4">
+      {/* hover glow */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+        style={{ background: 'radial-gradient(circle at 50% 0%, hsl(var(--primary) / 0.12), transparent 60%)' }}
+      />
+      <motion.div
+        whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
+        transition={{ duration: 0.5 }}
+        className="relative inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-primary/15 to-accent/15 mb-4 ring-1 ring-primary/10"
+      >
         <stat.icon className="h-6 w-6 text-primary" />
-      </div>
-      <p className="text-3xl md:text-4xl font-display font-bold text-foreground">
+      </motion.div>
+      <p className="relative text-3xl md:text-4xl font-display font-bold text-foreground tabular-nums">
         {display}{stat.suffix}
       </p>
-      <p className="text-sm text-muted-foreground mt-1 font-medium">{stat.label}</p>
+      <p className="relative text-sm text-muted-foreground mt-1 font-medium">{stat.label}</p>
     </motion.div>
   );
 }

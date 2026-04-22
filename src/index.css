@@ -216,3 +216,80 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+@keyframes orb-float-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(60px, -40px) scale(1.1); }
+}
+
+@keyframes orb-float-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-50px, 30px) scale(0.9); }
+}
+
+@keyframes orb-float-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(40px, 50px) scale(1.05); }
+}
+
+@keyframes gradient-pan {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes sheen {
+  0% { transform: translateX(-150%) skewX(-20deg); }
+  100% { transform: translateX(250%) skewX(-20deg); }
+}
+
+@layer components {
+  .text-gradient-animated {
+    background: linear-gradient(110deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--wine)), hsl(var(--primary)));
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradient-pan 8s ease-in-out infinite;
+  }
+
+  .sheen-on-hover {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .sheen-on-hover::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, hsl(var(--foreground) / 0.08), transparent);
+    transform: translateX(-150%) skewX(-20deg);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .sheen-on-hover:hover::before {
+    animation: sheen 0.9s ease-out;
+  }
+
+  .ring-glow {
+    box-shadow:
+      0 0 0 1px hsl(var(--primary) / 0.15),
+      0 10px 30px -10px hsl(var(--primary) / 0.25),
+      0 0 50px -20px hsl(var(--accent) / 0.3);
+  }
+
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text-gradient-animated,
+  [style*="orb-float"],
+  [style*="bg-drift"] {
+    animation: none !important;
+  }
+}

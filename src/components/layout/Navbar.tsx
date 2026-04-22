@@ -86,10 +86,15 @@ export default function Navbar({ favCount, onSearchOpen, onAddPlace }: NavbarPro
       <div className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-primary via-accent to-primary transition-all duration-150" style={{ width: `${scrollProgress}%` }} />
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
         <button onClick={goHome} className="flex items-center gap-2.5 font-display text-xl font-bold text-foreground group" aria-label="WeEat — Home">
-          <div className="p-1.5 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
-            <MapPin className="h-4 w-4 text-primary" />
-          </div>
-          WeEat
+          <motion.div
+            whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
+            transition={{ duration: 0.5 }}
+            className="relative p-1.5 rounded-lg bg-gradient-to-br from-primary/15 to-accent/15 group-hover:from-primary/25 group-hover:to-accent/25 transition-colors ring-1 ring-primary/10"
+          >
+            <span className="absolute inset-0 rounded-lg bg-primary/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
+            <MapPin className="relative h-4 w-4 text-primary" />
+          </motion.div>
+          <span className="group-hover:text-gradient-animated transition-colors">WeEat</span>
         </button>
 
         <nav className="hidden md:flex items-center gap-1">
