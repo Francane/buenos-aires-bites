@@ -1,12 +1,13 @@
 import { useState, useMemo } from 'react';
-import { LayoutGrid, List } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { LayoutGrid, List, X, SlidersHorizontal } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import type { Venue } from '@/types/venue';
 import { useLocale } from '@/i18n/LocaleProvider';
 import { getCuisines, getAllTags } from '@/data/venues';
 import VenueCard from './VenueCard';
 import EmptyState from '@/components/ui/EmptyState';
 import SkeletonLoader from '@/components/ui/SkeletonLoader';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface VenueGridProps {
   venues: Venue[];
