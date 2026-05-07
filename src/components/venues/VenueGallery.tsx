@@ -61,7 +61,7 @@ export default function VenueGallery({ images, venueName }: VenueGalleryProps) {
             src={hero}
             alt={`${venueName} foto principal`}
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
-            loading="lazy"
+            loading="lazy" decoding="async"
           />
           <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/15 transition-colors" />
           <span className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-background/85 backdrop-blur text-xs font-semibold text-foreground opacity-0 group-hover:opacity-100 transition-opacity">
@@ -92,7 +92,7 @@ export default function VenueGallery({ images, venueName }: VenueGalleryProps) {
                 src={img}
                 alt={`${venueName} foto ${realIndex + 1}`}
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
-                loading="lazy"
+                loading="lazy" decoding="async"
               />
               <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/15 transition-colors" />
               {isLast && (

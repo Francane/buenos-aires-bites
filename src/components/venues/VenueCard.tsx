@@ -170,7 +170,7 @@ export default function VenueCard({
               src={venue.imageUrl}
               alt=""
               className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-              loading="lazy"
+              loading="lazy" decoding="async"
             />
             {venue.featured && (
               <span className="absolute top-1.5 left-1.5 inline-flex items-center justify-center h-6 w-6 rounded-full bg-gold text-gold-foreground shadow-sm">
@@ -241,7 +241,7 @@ export default function VenueCard({
             src={venue.imageUrl}
             alt=""
             className="h-full w-full object-cover transition-transform duration-[700ms] ease-out group-hover:scale-[1.04]"
-            loading="lazy"
+            loading="lazy" decoding="async"
           />
 
           {/* Subtle gradient for badge legibility */}

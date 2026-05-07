@@ -24,6 +24,7 @@ import GeoBanner from '@/components/geo/GeoBanner';
 import ScrollToTop from '@/components/ui/ScrollToTop';
 import SkeletonLoader from '@/components/ui/SkeletonLoader';
 import ErrorBoundary from '@/components/error/ErrorBoundary';
+import BottomNav from '@/components/layout/BottomNav';
 
 const MapSection = lazy(() => import('@/components/map/MapSection'));
 
@@ -83,7 +84,12 @@ export default function Index() {
 
   const handleToggleFavorite = useCallback((id: string) => {
     const added = toggleFavorite(id);
-    toast.success(added ? t.toast.favAdded : t.toast.favRemoved);
+    toast.success(added ? t.toast.favAdded : t.toast.favRemoved, {
+      action: {
+        label: added ? (t.detail.close === 'Cerrar' ? 'Deshacer' : 'Undo') : (t.detail.close === 'Cerrar' ? 'Reagregar' : 'Re-add'),
+        onClick: () => toggleFavorite(id),
+      },
+    });
   }, [toggleFavorite, t]);
 
   const handleExplore = useCallback(() => {
@@ -106,7 +112,7 @@ export default function Index() {
   }, []);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pb-[68px] md:pb-0">
       <BackgroundFX />
       <Navbar
         favCount={favorites.length}
@@ -154,6 +160,7 @@ export default function Index() {
       />
 
       <ScrollToTop />
+      <BottomNav favCount={favorites.length} onSearchOpen={() => setSearchOpen(true)} />
 
       {geo.showBanner && (
         <GeoBanner onAccept={geo.acceptConsent} onDismiss={geo.dismissConsent} />
