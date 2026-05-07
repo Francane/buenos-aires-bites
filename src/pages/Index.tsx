@@ -84,7 +84,12 @@ export default function Index() {
 
   const handleToggleFavorite = useCallback((id: string) => {
     const added = toggleFavorite(id);
-    toast.success(added ? t.toast.favAdded : t.toast.favRemoved);
+    toast.success(added ? t.toast.favAdded : t.toast.favRemoved, {
+      action: {
+        label: added ? (t.detail.close === 'Cerrar' ? 'Deshacer' : 'Undo') : (t.detail.close === 'Cerrar' ? 'Reagregar' : 'Re-add'),
+        onClick: () => toggleFavorite(id),
+      },
+    });
   }, [toggleFavorite, t]);
 
   const handleExplore = useCallback(() => {
