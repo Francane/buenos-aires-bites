@@ -24,6 +24,7 @@ import GeoBanner from '@/components/geo/GeoBanner';
 import ScrollToTop from '@/components/ui/ScrollToTop';
 import SkeletonLoader from '@/components/ui/SkeletonLoader';
 import ErrorBoundary from '@/components/error/ErrorBoundary';
+import BottomNav from '@/components/layout/BottomNav';
 
 const MapSection = lazy(() => import('@/components/map/MapSection'));
 
@@ -106,7 +107,7 @@ export default function Index() {
   }, []);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pb-[68px] md:pb-0">
       <BackgroundFX />
       <Navbar
         favCount={favorites.length}
