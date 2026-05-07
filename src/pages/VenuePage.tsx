@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import BackgroundFX from '@/components/layout/BackgroundFX';
+import BottomNav from '@/components/layout/BottomNav';
 import VenueCard from '@/components/venues/VenueCard';
 import VenueGallery from '@/components/venues/VenueGallery';
 import VenueReviews from '@/components/venues/VenueReviews';
@@ -74,7 +75,7 @@ export default function VenuePage() {
   const fav = isFavorite(venue.id);
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative pb-[68px] md:pb-0">
       <BackgroundFX />
       <Navbar
         favCount={favorites.length}
@@ -112,17 +113,29 @@ export default function VenuePage() {
         <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-background via-background/85 to-transparent pointer-events-none" />
         <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-background/60 to-transparent pointer-events-none" />
 
-        {/* Back button */}
-        <motion.button
+        {/* Back + breadcrumb */}
+        <motion.div
           initial={{ opacity: 0, x: -16 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.15, duration: 0.4 }}
-          onClick={() => navigate(-1)}
-          className="absolute top-24 left-4 md:left-8 z-10 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-background/70 backdrop-blur-md border border-border text-foreground text-sm font-medium hover:bg-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className="absolute top-24 left-4 md:left-8 z-10 flex items-center gap-2"
         >
-          <ArrowLeft className="h-4 w-4" />
-          {t.detail.close}
-        </motion.button>
+          <button
+            onClick={() => navigate(-1)}
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-background/70 backdrop-blur-md border border-border text-foreground text-sm font-medium hover:bg-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            aria-label={t.detail.close}
+          >
+            <ArrowLeft className="h-4 w-4" />
+            <span className="hidden sm:inline">{t.detail.close}</span>
+          </button>
+          <nav aria-label="Breadcrumb" className="hidden md:flex items-center gap-1.5 text-xs text-foreground/70 px-3 py-1.5 rounded-full bg-background/60 backdrop-blur-md border border-border/60">
+            <Link to="/" className="hover:text-primary transition-colors">{t.nav.home}</Link>
+            <span>/</span>
+            <span className="text-foreground/90">{venue.neighborhood}</span>
+            <span>/</span>
+            <span className="font-semibold text-foreground truncate max-w-[180px]">{venue.name}</span>
+          </nav>
+        </motion.div>
 
         {/* Hero content */}
         <div className="absolute inset-x-0 bottom-0 px-6 md:px-12 pb-16 md:pb-20">
