@@ -20,6 +20,7 @@ function AnimatedRoutes() {
   const location = useLocation();
   return (
     <LayoutGroup>
+      <ScrollRestoration />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Index />} />
