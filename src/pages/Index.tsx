@@ -155,6 +155,7 @@ export default function Index() {
       />
 
       <ScrollToTop />
+      <BottomNav favCount={favorites.length} onSearchOpen={() => setSearchOpen(true)} />
 
       {geo.showBanner && (
         <GeoBanner onAccept={geo.acceptConsent} onDismiss={geo.dismissConsent} />
