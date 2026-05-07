@@ -442,6 +442,47 @@ export default function VenuePage() {
       </div>
 
       <Footer />
+
+      {/* Mobile sticky action bar */}
+      <motion.div
+        initial={{ y: 80, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.3, duration: 0.4 }}
+        className="md:hidden fixed bottom-[68px] inset-x-0 z-40 px-3 pb-2"
+        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 0.5rem)' }}
+      >
+        <div className="flex items-center gap-2 p-2 rounded-2xl glass-strong shadow-lg">
+          <button
+            onClick={handleToggleFav}
+            aria-pressed={fav}
+            aria-label={t.detail.favorite}
+            className={cn(
+              'h-11 w-11 inline-flex items-center justify-center rounded-xl border transition-colors flex-shrink-0',
+              fav ? 'bg-primary/10 text-primary border-primary/30' : 'bg-background text-foreground border-border',
+            )}
+          >
+            <Heart className={cn('h-5 w-5', fav && 'fill-primary')} />
+          </button>
+          <button
+            onClick={() => share(venue)}
+            aria-label={t.detail.share}
+            className="h-11 w-11 inline-flex items-center justify-center rounded-xl bg-background text-foreground border border-border flex-shrink-0"
+          >
+            <Share2 className="h-5 w-5" />
+          </button>
+          <a
+            href={directionsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 h-11 inline-flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground font-semibold text-sm shadow-md shadow-primary/25"
+          >
+            <Navigation className="h-4 w-4" />
+            {t.detail.directions}
+          </a>
+        </div>
+      </motion.div>
+
+      <BottomNav favCount={favorites.length} onSearchOpen={() => {}} />
     </div>
   );
 }
