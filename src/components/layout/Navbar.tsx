@@ -23,6 +23,7 @@ export default function Navbar({ favCount, onSearchOpen, onAddPlace }: NavbarPro
 
   const [scrollProgress, setScrollProgress] = useState(0);
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [activeSection, setActiveSection] = useState('inicio');
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -34,10 +35,17 @@ export default function Navbar({ favCount, onSearchOpen, onAddPlace }: NavbarPro
   };
 
   useEffect(() => {
+    let lastY = window.scrollY;
     const onScroll = () => {
+      const y = window.scrollY;
       const total = document.documentElement.scrollHeight - window.innerHeight;
-      setScrollProgress(total > 0 ? (window.scrollY / total) * 100 : 0);
-      setScrolled(window.scrollY > 20);
+      setScrollProgress(total > 0 ? (y / total) * 100 : 0);
+      setScrolled(y > 20);
+
+      // Hide on scroll down (after threshold), show on scroll up
+      if (y > 120 && y > lastY + 4) setHidden(true);
+      else if (y < lastY - 4 || y < 120) setHidden(false);
+      lastY = y;
 
       if (!isHome) return;
       for (const id of [...sections].reverse()) {
