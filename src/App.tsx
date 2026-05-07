@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { LocaleProvider } from "@/i18n/LocaleProvider";
 import { AnimatePresence, LayoutGroup } from "framer-motion";
 import ErrorBoundary from "@/components/error/ErrorBoundary";
+import PageTransition from "@/components/layout/PageTransition";
 import Index from "./pages/Index";
 import VenuePage from "./pages/VenuePage";
 import AgregarLugar from "./pages/AgregarLugar";
@@ -22,10 +23,10 @@ function AnimatedRoutes() {
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Index />} />
           <Route path="/venue/:id" element={<VenuePage />} />
-          <Route path="/agregar-lugar" element={<AgregarLugar />} />
-          <Route path="/ayuda" element={<Ayuda />} />
-          <Route path="/contacto" element={<Contacto />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="/agregar-lugar" element={<PageTransition><AgregarLugar /></PageTransition>} />
+          <Route path="/ayuda" element={<PageTransition><Ayuda /></PageTransition>} />
+          <Route path="/contacto" element={<PageTransition><Contacto /></PageTransition>} />
+          <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
         </Routes>
       </AnimatePresence>
     </LayoutGroup>
