@@ -287,9 +287,33 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .text-gradient-animated,
-  [style*="orb-float"],
-  [style*="bg-drift"] {
-    animation: none !important;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
+}
+
+/* Global focus-visible polish */
+@layer base {
+  :focus-visible {
+    outline: none;
+  }
+  a:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--primary) / 0.6);
+    border-radius: 8px;
+  }
+}
+
+/* Smooth image loading */
+img {
+  -webkit-user-drag: none;
 }
