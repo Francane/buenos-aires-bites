@@ -90,7 +90,10 @@ export default function Navbar({ favCount, onSearchOpen, onAddPlace }: NavbarPro
   }, [isHome, navigate]);
 
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'glass-strong shadow-sm' : 'bg-background/60 backdrop-blur-md'} border-b border-border/50`}>
+    <header
+      className={`sticky top-0 z-50 transition-[transform,background-color,box-shadow] duration-300 will-change-transform ${scrolled ? 'glass-strong shadow-sm' : 'bg-background/60 backdrop-blur-md'} border-b border-border/50 ${hidden && !mobileOpen ? '-translate-y-full' : 'translate-y-0'}`}
+      style={{ paddingTop: 'env(safe-area-inset-top)' }}
+    >
       <div className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-primary via-accent to-primary transition-all duration-150" style={{ width: `${scrollProgress}%` }} />
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
         <button onClick={goHome} className="flex items-center gap-2.5 font-display text-xl font-bold text-foreground group" aria-label="WeEat — Home">
