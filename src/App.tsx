@@ -6,6 +6,7 @@ import { LocaleProvider } from "@/i18n/LocaleProvider";
 import { AnimatePresence, LayoutGroup } from "framer-motion";
 import ErrorBoundary from "@/components/error/ErrorBoundary";
 import PageTransition from "@/components/layout/PageTransition";
+import ScrollRestoration from "@/components/layout/ScrollRestoration";
 import Index from "./pages/Index";
 import VenuePage from "./pages/VenuePage";
 import AgregarLugar from "./pages/AgregarLugar";
