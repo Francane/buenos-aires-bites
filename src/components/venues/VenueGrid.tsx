@@ -71,25 +71,68 @@ export default function VenueGrid({ venues, isFavorite, onToggleFavorite, onSele
           </div>
         </motion.div>
 
-        <div className="flex flex-wrap gap-3 mb-6">
-          <select
-            value={cuisineFilter}
-            onChange={e => { setCuisineFilter(e.target.value); setVisibleCount(PAGE_SIZE); }}
-            className="px-3 py-1.5 rounded-xl glass text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-          >
-            <option value="">{t.venues.filterByCuisine}: {t.venues.all}</option>
-            {cuisines.map(c => <option key={c} value={c}>{c}</option>)}
-          </select>
-          <select
-            value={tagFilter}
-            onChange={e => { setTagFilter(e.target.value); setVisibleCount(PAGE_SIZE); }}
-            className="px-3 py-1.5 rounded-xl glass text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-          >
-            <option value="">{t.venues.filterByTag}: {t.venues.all}</option>
-            {tags.map(tag => <option key={tag} value={tag}>{tag}</option>)}
-          </select>
-          <span className="text-sm text-muted-foreground self-center ml-auto">
-            {t.venues.showing} {visible.length} {t.venues.of} {filtered.length} {t.search.results}
+        <div className="flex flex-wrap items-center gap-3 mb-6">
+          <div className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <SlidersHorizontal className="h-3.5 w-3.5" />
+            {t.venues.filterByCuisine.split(' ')[0]}
+          </div>
+
+          <Select value={cuisineFilter || 'all'} onValueChange={v => { setCuisineFilter(v === 'all' ? '' : v); setVisibleCount(PAGE_SIZE); }}>
+            <SelectTrigger className="w-auto min-w-[160px] h-9 rounded-xl glass border-border/60 text-sm">
+              <SelectValue placeholder={t.venues.filterByCuisine} />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl">
+              <SelectItem value="all">{t.venues.filterByCuisine}: {t.venues.all}</SelectItem>
+              {cuisines.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+            </SelectContent>
+          </Select>
+
+          <Select value={tagFilter || 'all'} onValueChange={v => { setTagFilter(v === 'all' ? '' : v); setVisibleCount(PAGE_SIZE); }}>
+            <SelectTrigger className="w-auto min-w-[160px] h-9 rounded-xl glass border-border/60 text-sm">
+              <SelectValue placeholder={t.venues.filterByTag} />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl">
+              <SelectItem value="all">{t.venues.filterByTag}: {t.venues.all}</SelectItem>
+              {tags.map(tag => <SelectItem key={tag} value={tag}>{tag}</SelectItem>)}
+            </SelectContent>
+          </Select>
+
+          <AnimatePresence>
+            {(cuisineFilter || tagFilter) && (
+              <motion.div
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -8 }}
+                className="flex items-center gap-1.5 flex-wrap"
+              >
+                {cuisineFilter && (
+                  <button
+                    onClick={() => { setCuisineFilter(''); setVisibleCount(PAGE_SIZE); }}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold hover:bg-primary/15 transition-colors"
+                  >
+                    {cuisineFilter} <X className="h-3 w-3" />
+                  </button>
+                )}
+                {tagFilter && (
+                  <button
+                    onClick={() => { setTagFilter(''); setVisibleCount(PAGE_SIZE); }}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-accent/15 text-accent-foreground text-xs font-semibold hover:bg-accent/25 transition-colors"
+                  >
+                    {tagFilter} <X className="h-3 w-3" />
+                  </button>
+                )}
+                <button
+                  onClick={() => { setCuisineFilter(''); setTagFilter(''); setVisibleCount(PAGE_SIZE); }}
+                  className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-2 ml-1"
+                >
+                  {t.venues.all === 'Todos' ? 'Limpiar' : 'Clear'}
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <span className="text-sm text-muted-foreground self-center ml-auto tabular-nums">
+            <span className="font-semibold text-foreground">{visible.length}</span> {t.venues.of} {filtered.length} {t.search.results}
           </span>
         </div>
 
