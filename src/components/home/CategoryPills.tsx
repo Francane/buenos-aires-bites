@@ -25,7 +25,8 @@ const cuisineIcons: Record<string, typeof Flame> = {
 
 export default function CategoryPills({ onSelectCuisine }: CategoryPillsProps) {
   const { locale } = useLocale();
-  const cuisines = getCuisines();
+  const { data: venues = [] } = useVenues();
+  const cuisines = getCuisines(venues);
 
   return (
     <section className="py-10">
