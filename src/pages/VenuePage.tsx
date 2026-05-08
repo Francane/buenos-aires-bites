@@ -5,7 +5,7 @@ import {
   ArrowLeft, Heart, Share2, Navigation, Star, Clock, MapPin, Tag,
   DollarSign, Award, Calendar, ChevronDown,
 } from 'lucide-react';
-import { venues } from '@/data/venues';
+import { useVenue, useVenues } from '@/data/venues';
 import { useLocale } from '@/i18n/LocaleProvider';
 import { useFavorites } from '@/hooks/useFavorites';
 import { useShare } from '@/hooks/useShare';
