@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Flame, Coffee, Pizza, Wine, IceCream, UtensilsCrossed, Beef, Globe } from 'lucide-react';
-import { getCuisines } from '@/data/venues';
+import { getCuisines, useVenues } from '@/data/venues';
 import { useLocale } from '@/i18n/LocaleProvider';
 
 interface CategoryPillsProps {
