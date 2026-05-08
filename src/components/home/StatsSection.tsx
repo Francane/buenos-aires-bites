@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Utensils, Star, Heart } from 'lucide-react';
 import { useLocale } from '@/i18n/LocaleProvider';
-import { venues } from '@/data/venues';
+import { useVenues } from '@/hooks/useVenues';
 
 function useCountUp(target: number, duration = 2000) {
   const [count, setCount] = useState(0);
