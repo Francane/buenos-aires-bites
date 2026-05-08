@@ -52,6 +52,8 @@ export default function Index() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [focusVenueId] = useState<string | null>(null);
 
+  const { data: allVenues = [] } = useVenues();
+
   const [searchQuery, setSearchQuery] = useState('');
   const [searchNeighborhood, setSearchNeighborhood] = useState('');
   const [searchCuisine, setSearchCuisine] = useState('');
