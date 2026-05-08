@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Search as SearchIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useLocale } from '@/i18n/LocaleProvider';
-import { getNeighborhoods, getCuisines } from '@/data/venues';
+import { getNeighborhoods, getCuisines, useVenues } from '@/data/venues';
 
 interface HeroSearchProps {
   onSearch: (query: string, neighborhood: string, cuisine: string) => void;
@@ -13,8 +13,9 @@ export default function HeroSearch({ onSearch }: HeroSearchProps) {
   const [query, setQuery] = useState('');
   const [neighborhood, setNeighborhood] = useState('');
   const [cuisine, setCuisine] = useState('');
-  const neighborhoods = getNeighborhoods();
-  const cuisines = getCuisines();
+  const { data: venues = [] } = useVenues();
+  const neighborhoods = getNeighborhoods(venues);
+  const cuisines = getCuisines(venues);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
