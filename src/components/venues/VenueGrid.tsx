@@ -26,8 +26,8 @@ export default function VenueGrid({ venues, isFavorite, onToggleFavorite, onSele
   const [tagFilter, setTagFilter] = useState('');
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
-  const cuisines = getCuisines();
-  const tags = getAllTags();
+  const cuisines = getCuisines(venues);
+  const tags = getAllTags(venues);
 
   const filtered = useMemo(() => {
     let result = venues;

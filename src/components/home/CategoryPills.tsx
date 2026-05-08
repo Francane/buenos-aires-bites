@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Flame, Coffee, Pizza, Wine, IceCream, UtensilsCrossed, Beef, Globe } from 'lucide-react';
-import { getCuisines } from '@/data/venues';
+import { getCuisines, useVenues } from '@/data/venues';
 import { useLocale } from '@/i18n/LocaleProvider';
 
 interface CategoryPillsProps {
@@ -25,7 +25,8 @@ const cuisineIcons: Record<string, typeof Flame> = {
 
 export default function CategoryPills({ onSelectCuisine }: CategoryPillsProps) {
   const { locale } = useLocale();
-  const cuisines = getCuisines();
+  const { data: venues = [] } = useVenues();
+  const cuisines = getCuisines(venues);
 
   return (
     <section className="py-10">

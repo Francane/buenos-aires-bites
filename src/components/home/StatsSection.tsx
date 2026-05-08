@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Utensils, Star, Heart } from 'lucide-react';
 import { useLocale } from '@/i18n/LocaleProvider';
-import { venues } from '@/data/venues';
+import { useVenues } from '@/hooks/useVenues';
 
 function useCountUp(target: number, duration = 2000) {
   const [count, setCount] = useState(0);
@@ -37,9 +37,10 @@ function useCountUp(target: number, duration = 2000) {
 
 export default function StatsSection() {
   const { locale } = useLocale();
+  const { data: venues = [] } = useVenues();
   const neighborhoods = [...new Set(venues.map(v => v.neighborhood))].length;
   const totalReviews = venues.reduce((acc, v) => acc + v.reviewCount, 0);
-  const avgRating = +(venues.reduce((acc, v) => acc + v.rating, 0) / venues.length).toFixed(1);
+  const avgRating = venues.length ? +(venues.reduce((acc, v) => acc + v.rating, 0) / venues.length).toFixed(1) : 0;
 
   const stats = [
     { icon: Utensils, value: venues.length, label: locale === 'es' ? 'Lugares' : 'Venues', suffix: '+' },

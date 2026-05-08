@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, Suspense, lazy } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import { venues as allVenues } from '@/data/venues';
+import { useVenues } from '@/data/venues';
 import { useLocale } from '@/i18n/LocaleProvider';
 import { useFavorites } from '@/hooks/useFavorites';
 import { useGeolocation } from '@/hooks/useGeolocation';
@@ -51,6 +51,8 @@ export default function Index() {
 
   const [searchOpen, setSearchOpen] = useState(false);
   const [focusVenueId] = useState<string | null>(null);
+
+  const { data: allVenues = [] } = useVenues();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchNeighborhood, setSearchNeighborhood] = useState('');

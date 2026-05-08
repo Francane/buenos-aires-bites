@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Send } from 'lucide-react';
 import { toast } from 'sonner';
 import { useLocale } from '@/i18n/LocaleProvider';
-import { getNeighborhoods, getCuisines } from '@/data/venues';
+import { getNeighborhoods, getCuisines, useVenues } from '@/data/venues';
 import BackgroundFX from '@/components/layout/BackgroundFX';
 
 export default function AgregarLugar() {
@@ -11,8 +11,9 @@ export default function AgregarLugar() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: '', address: '', neighborhood: '', cuisine: '', description: '' });
 
-  const neighborhoods = getNeighborhoods();
-  const cuisines = getCuisines();
+  const { data: venues = [] } = useVenues();
+  const neighborhoods = getNeighborhoods(venues);
+  const cuisines = getCuisines(venues);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

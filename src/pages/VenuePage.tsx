@@ -5,7 +5,7 @@ import {
   ArrowLeft, Heart, Share2, Navigation, Star, Clock, MapPin, Tag,
   DollarSign, Award, Calendar, ChevronDown,
 } from 'lucide-react';
-import { venues } from '@/data/venues';
+import { useVenue, useVenues } from '@/data/venues';
 import { useLocale } from '@/i18n/LocaleProvider';
 import { useFavorites } from '@/hooks/useFavorites';
 import { useShare } from '@/hooks/useShare';
@@ -46,7 +46,19 @@ export default function VenuePage() {
   const heroOpacity = useTransform(scrollY, [0, 400], [1, 0.4]);
   const scrollHintOpacity = useTransform(scrollY, [0, 120], [1, 0]);
 
-  const venue = venues.find(v => v.id === id);
+  const { data: venue, isLoading } = useVenue(id);
+  const { data: venues = [] } = useVenues();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="h-8 w-8 mx-auto rounded-full border-2 border-primary/30 border-t-primary animate-spin" />
+          <p className="text-sm text-muted-foreground">Cargando…</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!venue) {
     return (
