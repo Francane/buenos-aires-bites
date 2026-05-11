@@ -72,7 +72,7 @@ export default function Index() {
     if (searchNeighborhood) result = result.filter(v => v.neighborhood === searchNeighborhood);
     if (searchCuisine) result = result.filter(v => v.cuisine === searchCuisine);
     return result;
-  }, [searchQuery, searchNeighborhood, searchCuisine]);
+  }, [allVenues, searchQuery, searchNeighborhood, searchCuisine]);
 
   const handleSearch = useCallback((query: string, neighborhood: string, cuisine: string) => {
     setSearchQuery(query);
