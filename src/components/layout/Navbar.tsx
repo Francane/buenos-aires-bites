@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Menu, X, Search, Heart, MapPin, Plus, Moon, Sun } from 'lucide-react';
+import { Menu, X, Search, Heart, MapPin, Plus, Moon, Sun, User as UserIcon, LogIn } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useLocale } from '@/i18n/LocaleProvider';
 import { useDarkMode } from '@/hooks/useDarkMode';
+import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface NavbarProps {
   favCount: number;
@@ -17,6 +19,7 @@ const sections = ['inicio', 'explorar', 'categorias', 'favoritos'] as const;
 export default function Navbar({ favCount, onSearchOpen, onAddPlace }: NavbarProps) {
   const { t, locale, setLocale } = useLocale();
   const { isDark, toggle: toggleDark } = useDarkMode();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const isHome = location.pathname === '/';
@@ -171,6 +174,28 @@ export default function Navbar({ favCount, onSearchOpen, onAddPlace }: NavbarPro
           <Button size="sm" onClick={onAddPlace} className="hidden sm:flex gap-1 rounded-lg shine">
             <Plus className="h-4 w-4" /> {t.nav.addPlace}
           </Button>
+          {user ? (
+            <button
+              onClick={() => navigate('/perfil')}
+              className="p-0.5 rounded-full ring-1 ring-border hover:ring-primary/50 transition-all"
+              aria-label="Mi perfil"
+            >
+              <Avatar className="h-8 w-8">
+                <AvatarImage src={user.user_metadata?.avatar_url} />
+                <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">
+                  {(user.user_metadata?.display_name || user.email || '?').slice(0, 2).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            </button>
+          ) : (
+            <button
+              onClick={() => navigate('/auth')}
+              className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+              aria-label="Iniciar sesión"
+            >
+              <LogIn className="h-5 w-5" />
+            </button>
+          )}
           <button
             onClick={() => setLocale(locale === 'es' ? 'en' : 'es')}
             className="px-2.5 py-1.5 text-xs font-bold rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
