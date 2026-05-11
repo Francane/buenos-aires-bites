@@ -7,11 +7,14 @@ import { AnimatePresence, LayoutGroup } from "framer-motion";
 import ErrorBoundary from "@/components/error/ErrorBoundary";
 import PageTransition from "@/components/layout/PageTransition";
 import ScrollRestoration from "@/components/layout/ScrollRestoration";
+import { AuthProvider } from "@/hooks/useAuth";
 import Index from "./pages/Index";
 import VenuePage from "./pages/VenuePage";
 import AgregarLugar from "./pages/AgregarLugar";
 import Ayuda from "./pages/Ayuda";
 import Contacto from "./pages/Contacto";
+import Auth from "./pages/Auth";
+import Perfil from "./pages/Perfil";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +31,8 @@ function AnimatedRoutes() {
           <Route path="/agregar-lugar" element={<PageTransition><AgregarLugar /></PageTransition>} />
           <Route path="/ayuda" element={<PageTransition><Ayuda /></PageTransition>} />
           <Route path="/contacto" element={<PageTransition><Contacto /></PageTransition>} />
+          <Route path="/auth" element={<PageTransition><Auth /></PageTransition>} />
+          <Route path="/perfil" element={<PageTransition><Perfil /></PageTransition>} />
           <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
         </Routes>
       </AnimatePresence>
@@ -41,9 +46,11 @@ const App = () => (
       <TooltipProvider>
         <Sonner />
         <BrowserRouter>
-          <ErrorBoundary>
-            <AnimatedRoutes />
-          </ErrorBoundary>
+          <AuthProvider>
+            <ErrorBoundary>
+              <AnimatedRoutes />
+            </ErrorBoundary>
+          </AuthProvider>
         </BrowserRouter>
       </TooltipProvider>
     </LocaleProvider>
