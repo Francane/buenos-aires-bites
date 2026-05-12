@@ -132,9 +132,10 @@ export default function Index() {
       />
 
       <HeroSection onExplore={handleExplore} onFavorites={handleFavorites} />
-      <HeroSearch onSearch={handleSearch} />
+      <HeroSearch onSearch={handleSearch} onAiResults={setAiMatches} />
       <StatsSection />
       <TrendingSection venues={allVenues} onSelectVenue={handleSelectVenue} />
+      <AiRecommendationsSection venues={allVenues} favoriteIds={favorites} onSelectVenue={handleSelectVenue} />
       <CategoryPills onSelectCuisine={handleCategorySelect} />
 
       <ErrorBoundary fallback={<MapFallback />}>
