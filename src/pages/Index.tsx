@@ -28,6 +28,8 @@ import BottomNav from '@/components/layout/BottomNav';
 import AiRecommendationsSection from '@/components/home/AiRecommendationsSection';
 import type { AiMatch } from '@/hooks/useAiVenues';
 
+const MapSection = lazy(() => import('@/components/map/MapSection'));
+
 function MapFallback() {
   return (
     <section id="explorar" className="py-16">
