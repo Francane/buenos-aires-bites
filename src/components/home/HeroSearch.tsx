@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search as SearchIcon, Sparkles, Loader2, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocale } from '@/i18n/LocaleProvider';
@@ -35,14 +35,9 @@ export default function HeroSearch({ onSearch, onAiResults }: HeroSearchProps) {
     document.getElementById('categorias')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Sync AI results upward
-  if (aiMode && onAiResults && ai.matches !== undefined) {
-    // Will call on every render — guard with a ref-less pattern:
-  }
-
-  // Use effect-equivalent inline
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useSyncMatches(aiMode, ai.matches, onAiResults);
+  useEffect(() => {
+    if (aiMode) onAiResults?.(ai.matches);
+  }, [aiMode, ai.matches, onAiResults]);
 
   return (
     <section className="py-8">
@@ -147,10 +142,3 @@ export default function HeroSearch({ onSearch, onAiResults }: HeroSearchProps) {
   );
 }
 
-// Helper hook to sync matches without re-rendering loops
-import { useEffect } from 'react';
-function useSyncMatches(active: boolean, matches: AiMatch[] | null, cb?: (m: AiMatch[] | null) => void) {
-  useEffect(() => {
-    if (active) cb?.(matches);
-  }, [active, matches, cb]);
-}
