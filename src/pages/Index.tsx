@@ -25,6 +25,8 @@ import ScrollToTop from '@/components/ui/ScrollToTop';
 import SkeletonLoader from '@/components/ui/SkeletonLoader';
 import ErrorBoundary from '@/components/error/ErrorBoundary';
 import BottomNav from '@/components/layout/BottomNav';
+import AiRecommendationsSection from '@/components/home/AiRecommendationsSection';
+import type { AiMatch } from '@/hooks/useAiVenues';
 
 const MapSection = lazy(() => import('@/components/map/MapSection'));
 
@@ -57,8 +59,15 @@ export default function Index() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchNeighborhood, setSearchNeighborhood] = useState('');
   const [searchCuisine, setSearchCuisine] = useState('');
+  const [aiMatches, setAiMatches] = useState<AiMatch[] | null>(null);
 
   const filteredVenues = useMemo(() => {
+    if (aiMatches) {
+      const order = new Map(aiMatches.map((m, i) => [m.id, i]));
+      return allVenues
+        .filter(v => order.has(v.id))
+        .sort((a, b) => (order.get(a.id)! - order.get(b.id)!));
+    }
     let result = allVenues;
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
@@ -72,7 +81,7 @@ export default function Index() {
     if (searchNeighborhood) result = result.filter(v => v.neighborhood === searchNeighborhood);
     if (searchCuisine) result = result.filter(v => v.cuisine === searchCuisine);
     return result;
-  }, [allVenues, searchQuery, searchNeighborhood, searchCuisine]);
+  }, [allVenues, searchQuery, searchNeighborhood, searchCuisine, aiMatches]);
 
   const handleSearch = useCallback((query: string, neighborhood: string, cuisine: string) => {
     setSearchQuery(query);
@@ -123,9 +132,10 @@ export default function Index() {
       />
 
       <HeroSection onExplore={handleExplore} onFavorites={handleFavorites} />
-      <HeroSearch onSearch={handleSearch} />
+      <HeroSearch onSearch={handleSearch} onAiResults={setAiMatches} />
       <StatsSection />
       <TrendingSection venues={allVenues} onSelectVenue={handleSelectVenue} />
+      <AiRecommendationsSection venues={allVenues} favoriteIds={favorites} onSelectVenue={handleSelectVenue} />
       <CategoryPills onSelectCuisine={handleCategorySelect} />
 
       <ErrorBoundary fallback={<MapFallback />}>
