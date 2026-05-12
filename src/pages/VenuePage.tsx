@@ -503,3 +503,16 @@ export default function VenuePage() {
     </div>
   );
 }
+
+function AiSummaryBlock({ venueName, reviews }: { venueName: string; reviews: { author: string; content: string; rating: number }[] }) {
+  const { data, loading, error, generate, canGenerate } = useAiReviewSummary(venueName, reviews, true);
+  return (
+    <AiReviewSummary
+      data={data}
+      loading={loading}
+      error={error}
+      onGenerate={generate}
+      hasReviews={canGenerate}
+    />
+  );
+}
