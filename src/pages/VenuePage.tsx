@@ -17,6 +17,8 @@ import BottomNav from '@/components/layout/BottomNav';
 import VenueCard from '@/components/venues/VenueCard';
 import VenueGallery from '@/components/venues/VenueGallery';
 import VenueReviews from '@/components/venues/VenueReviews';
+import AiReviewSummary from '@/components/venues/AiReviewSummary';
+import { useAiReviewSummary } from '@/hooks/useAiVenues';
 import { cn } from '@/lib/utils';
 
 function PriceRange({ level }: { level: number }) {
@@ -273,9 +275,12 @@ export default function VenuePage() {
               </section>
             )}
 
-            {/* Reviews */}
+            {/* AI Summary + Reviews */}
             {venue.reviews && venue.reviews.length > 0 && (
-              <VenueReviews reviews={venue.reviews} title={t.detail.reviews} />
+              <>
+                <AiSummaryBlock venueName={venue.name} reviews={venue.reviews} />
+                <VenueReviews reviews={venue.reviews} title={t.detail.reviews} />
+              </>
             )}
           </motion.div>
 
