@@ -25,8 +25,8 @@ import ScrollToTop from '@/components/ui/ScrollToTop';
 import SkeletonLoader from '@/components/ui/SkeletonLoader';
 import ErrorBoundary from '@/components/error/ErrorBoundary';
 import BottomNav from '@/components/layout/BottomNav';
-
-const MapSection = lazy(() => import('@/components/map/MapSection'));
+import AiRecommendationsSection from '@/components/home/AiRecommendationsSection';
+import type { AiMatch } from '@/hooks/useAiVenues';
 
 function MapFallback() {
   return (
