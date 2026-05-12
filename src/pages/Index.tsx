@@ -59,8 +59,15 @@ export default function Index() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchNeighborhood, setSearchNeighborhood] = useState('');
   const [searchCuisine, setSearchCuisine] = useState('');
+  const [aiMatches, setAiMatches] = useState<AiMatch[] | null>(null);
 
   const filteredVenues = useMemo(() => {
+    if (aiMatches) {
+      const order = new Map(aiMatches.map((m, i) => [m.id, i]));
+      return allVenues
+        .filter(v => order.has(v.id))
+        .sort((a, b) => (order.get(a.id)! - order.get(b.id)!));
+    }
     let result = allVenues;
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
@@ -74,7 +81,7 @@ export default function Index() {
     if (searchNeighborhood) result = result.filter(v => v.neighborhood === searchNeighborhood);
     if (searchCuisine) result = result.filter(v => v.cuisine === searchCuisine);
     return result;
-  }, [allVenues, searchQuery, searchNeighborhood, searchCuisine]);
+  }, [allVenues, searchQuery, searchNeighborhood, searchCuisine, aiMatches]);
 
   const handleSearch = useCallback((query: string, neighborhood: string, cuisine: string) => {
     setSearchQuery(query);
