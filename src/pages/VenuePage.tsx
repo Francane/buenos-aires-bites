@@ -19,6 +19,8 @@ import VenueGallery from '@/components/venues/VenueGallery';
 import VenueReviews from '@/components/venues/VenueReviews';
 import AiReviewSummary from '@/components/venues/AiReviewSummary';
 import { useAiReviewSummary } from '@/hooks/useAiVenues';
+import AddToListButton from '@/components/lists/AddToListButton';
+import CheckInButton from '@/components/venues/CheckInButton';
 import { cn } from '@/lib/utils';
 
 function PriceRange({ level }: { level: number }) {
