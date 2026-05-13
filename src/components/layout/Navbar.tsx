@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Menu, X, Search, Heart, MapPin, Plus, Moon, Sun, User as UserIcon, LogIn } from 'lucide-react';
+import { Menu, X, Search, Heart, MapPin, Plus, Moon, Sun, User as UserIcon, LogIn, BookmarkIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useLocale } from '@/i18n/LocaleProvider';
