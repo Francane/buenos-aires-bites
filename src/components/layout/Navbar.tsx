@@ -174,6 +174,16 @@ export default function Navbar({ favCount, onSearchOpen, onAddPlace }: NavbarPro
           <Button size="sm" onClick={onAddPlace} className="hidden sm:flex gap-1 rounded-lg shine">
             <Plus className="h-4 w-4" /> {t.nav.addPlace}
           </Button>
+          {user && (
+            <button
+              onClick={() => navigate('/listas')}
+              className="hidden sm:inline-flex p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+              aria-label="Mis listas"
+              title="Mis listas"
+            >
+              <BookmarkIcon className="h-5 w-5" />
+            </button>
+          )}
           {user ? (
             <button
               onClick={() => navigate('/perfil')}
