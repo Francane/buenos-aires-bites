@@ -15,6 +15,7 @@ export default function ListaDetalle() {
   const { user } = useAuth();
   const { data, isLoading } = useList(id);
   const { data: venues = [] } = useVenues();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const removeItem = useRemoveListItem();
 
   if (isLoading) {
