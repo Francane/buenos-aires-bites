@@ -331,6 +331,10 @@ export default function VenuePage() {
                     {t.detail.share}
                   </button>
                 </div>
+                <div className="grid grid-cols-2 gap-2 mt-2">
+                  <AddToListButton venueId={venue.id} />
+                  <CheckInButton venueId={venue.id} venueName={venue.name} />
+                </div>
               </div>
 
               {/* Info group */}
