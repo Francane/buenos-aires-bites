@@ -15,6 +15,8 @@ import Ayuda from "./pages/Ayuda";
 import Contacto from "./pages/Contacto";
 import Auth from "./pages/Auth";
 import Perfil from "./pages/Perfil";
+import Listas from "./pages/Listas";
+import ListaDetalle from "./pages/ListaDetalle";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
