@@ -71,7 +71,7 @@ export default function ListaDetalle() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {listVenues.map(({ item, venue }) => (
               <div key={item.id} className="relative">
-                <VenueCard venue={venue!} index={0} />
+                <VenueCard venue={venue!} />
                 {isOwner && (
                   <button
                     onClick={() => handleRemove(venue!.id)}
