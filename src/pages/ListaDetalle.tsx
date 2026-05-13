@@ -73,7 +73,12 @@ export default function ListaDetalle() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {listVenues.map(({ item, venue }) => (
               <div key={item.id} className="relative">
-                <VenueCard venue={venue!} />
+                <VenueCard
+                  venue={venue!}
+                  isFavorite={isFavorite(venue!.id)}
+                  onToggleFavorite={(vid) => toggleFavorite(vid)}
+                  onSelect={(v) => navigate(`/venue/${v.id}`)}
+                />
                 {isOwner && (
                   <button
                     onClick={() => handleRemove(venue!.id)}
