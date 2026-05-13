@@ -3,6 +3,7 @@ import { ArrowLeft, Loader2, Globe, Lock, Trash2 } from 'lucide-react';
 import { useList, useRemoveListItem } from '@/hooks/useLists';
 import { useVenues } from '@/hooks/useVenues';
 import { useAuth } from '@/hooks/useAuth';
+import { useFavorites } from '@/hooks/useFavorites';
 import VenueCard from '@/components/venues/VenueCard';
 import BackgroundFX from '@/components/layout/BackgroundFX';
 import Navbar from '@/components/layout/Navbar';
