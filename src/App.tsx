@@ -35,6 +35,8 @@ function AnimatedRoutes() {
           <Route path="/contacto" element={<PageTransition><Contacto /></PageTransition>} />
           <Route path="/auth" element={<PageTransition><Auth /></PageTransition>} />
           <Route path="/perfil" element={<PageTransition><Perfil /></PageTransition>} />
+          <Route path="/listas" element={<PageTransition><Listas /></PageTransition>} />
+          <Route path="/lista/:id" element={<PageTransition><ListaDetalle /></PageTransition>} />
           <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
         </Routes>
       </AnimatePresence>
