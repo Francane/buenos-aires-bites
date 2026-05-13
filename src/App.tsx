@@ -15,6 +15,8 @@ import Ayuda from "./pages/Ayuda";
 import Contacto from "./pages/Contacto";
 import Auth from "./pages/Auth";
 import Perfil from "./pages/Perfil";
+import Listas from "./pages/Listas";
+import ListaDetalle from "./pages/ListaDetalle";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +35,8 @@ function AnimatedRoutes() {
           <Route path="/contacto" element={<PageTransition><Contacto /></PageTransition>} />
           <Route path="/auth" element={<PageTransition><Auth /></PageTransition>} />
           <Route path="/perfil" element={<PageTransition><Perfil /></PageTransition>} />
+          <Route path="/listas" element={<PageTransition><Listas /></PageTransition>} />
+          <Route path="/lista/:id" element={<PageTransition><ListaDetalle /></PageTransition>} />
           <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
         </Routes>
       </AnimatePresence>

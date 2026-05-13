@@ -19,6 +19,8 @@ import VenueGallery from '@/components/venues/VenueGallery';
 import VenueReviews from '@/components/venues/VenueReviews';
 import AiReviewSummary from '@/components/venues/AiReviewSummary';
 import { useAiReviewSummary } from '@/hooks/useAiVenues';
+import AddToListButton from '@/components/lists/AddToListButton';
+import CheckInButton from '@/components/venues/CheckInButton';
 import { cn } from '@/lib/utils';
 
 function PriceRange({ level }: { level: number }) {
@@ -328,6 +330,10 @@ export default function VenuePage() {
                     <Share2 className="h-4 w-4" />
                     {t.detail.share}
                   </button>
+                </div>
+                <div className="grid grid-cols-2 gap-2 mt-2">
+                  <AddToListButton venueId={venue.id} />
+                  <CheckInButton venueId={venue.id} venueName={venue.name} />
                 </div>
               </div>
 

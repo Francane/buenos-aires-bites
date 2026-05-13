@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      check_ins: {
+        Row: {
+          comment: string | null
+          created_at: string
+          id: string
+          user_id: string
+          venue_id: string
+          visited_at: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          id?: string
+          user_id: string
+          venue_id: string
+          visited_at?: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          id?: string
+          user_id?: string
+          venue_id?: string
+          visited_at?: string
+        }
+        Relationships: []
+      }
       favorites: {
         Row: {
           created_at: string
@@ -42,6 +69,71 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      list_items: {
+        Row: {
+          created_at: string
+          id: string
+          list_id: string
+          note: string | null
+          venue_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          list_id: string
+          note?: string | null
+          venue_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          list_id?: string
+          note?: string | null
+          venue_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "list_items_list_id_fkey"
+            columns: ["list_id"]
+            isOneToOne: false
+            referencedRelation: "lists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lists: {
+        Row: {
+          cover_emoji: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_public: boolean
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cover_emoji?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cover_emoji?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {

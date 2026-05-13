@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Menu, X, Search, Heart, MapPin, Plus, Moon, Sun, User as UserIcon, LogIn } from 'lucide-react';
+import { Menu, X, Search, Heart, MapPin, Plus, Moon, Sun, User as UserIcon, LogIn, BookmarkIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useLocale } from '@/i18n/LocaleProvider';
@@ -174,6 +174,16 @@ export default function Navbar({ favCount, onSearchOpen, onAddPlace }: NavbarPro
           <Button size="sm" onClick={onAddPlace} className="hidden sm:flex gap-1 rounded-lg shine">
             <Plus className="h-4 w-4" /> {t.nav.addPlace}
           </Button>
+          {user && (
+            <button
+              onClick={() => navigate('/listas')}
+              className="hidden sm:inline-flex p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+              aria-label="Mis listas"
+              title="Mis listas"
+            >
+              <BookmarkIcon className="h-5 w-5" />
+            </button>
+          )}
           {user ? (
             <button
               onClick={() => navigate('/perfil')}
