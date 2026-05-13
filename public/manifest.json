@@ -1,0 +1,19 @@
+{
+  "name": "WeEat — Guía foodie de Buenos Aires",
+  "short_name": "WeEat",
+  "description": "Descubrí los mejores lugares para comer en Buenos Aires.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0b0b0d",
+  "theme_color": "#0b0b0d",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/placeholder.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
