@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 
-const CONSENT_KEY = 'weeat-geo-consent';
+const CONSENT_KEY = 'bites-geo-consent';
 const CONSENT_DAYS = 7;
 
 interface GeoState {

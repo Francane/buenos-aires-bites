@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 export function useDarkMode() {
   const [isDark, setIsDark] = useState(() => {
     if (typeof window === 'undefined') return false;
-    const stored = localStorage.getItem('weeat-theme');
+    const stored = localStorage.getItem('bites-theme');
     if (stored) return stored === 'dark';
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
@@ -15,7 +15,7 @@ export function useDarkMode() {
     } else {
       root.classList.remove('dark');
     }
-    localStorage.setItem('weeat-theme', isDark ? 'dark' : 'light');
+    localStorage.setItem('bites-theme', isDark ? 'dark' : 'light');
   }, [isDark]);
 
   const toggle = useCallback(() => setIsDark(prev => !prev), []);
