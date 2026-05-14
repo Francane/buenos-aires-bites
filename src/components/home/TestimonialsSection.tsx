@@ -9,8 +9,8 @@ const testimonials = [
     author: 'Valentina R.',
     role: { es: 'Food blogger', en: 'Food blogger' },
     content: {
-      es: 'WeEat cambió mi forma de descubrir lugares en Buenos Aires. Ya no me pierdo ningún bodegón escondido.',
-      en: 'WeEat changed how I discover places in Buenos Aires. I never miss a hidden gem anymore.',
+      es: 'Bites cambió mi forma de descubrir lugares en Buenos Aires. Ya no me pierdo ningún bodegón escondido.',
+      en: 'Bites changed how I discover places in Buenos Aires. I never miss a hidden gem anymore.',
     },
     rating: 5,
     avatar: 'VR',
@@ -31,8 +31,8 @@ const testimonials = [
     author: 'Sophie L.',
     role: { es: 'Turista (Francia)', en: 'Tourist (France)' },
     content: {
-      es: 'Encontré los mejores restaurantes gracias a WeEat. El mapa interactivo es increíble.',
-      en: 'I found the best restaurants thanks to WeEat. The interactive map is incredible.',
+      es: 'Encontré los mejores restaurantes gracias a Bites. El mapa interactivo es increíble.',
+      en: 'I found the best restaurants thanks to Bites. The interactive map is incredible.',
     },
     rating: 5,
     avatar: 'SL',

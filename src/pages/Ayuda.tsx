@@ -14,7 +14,7 @@ export default function Ayuda() {
       <BackgroundFX />
       <div className="container mx-auto px-4 py-12 max-w-xl">
         <button onClick={() => navigate('/')} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8">
-          <ArrowLeft className="h-4 w-4" /> WeEat
+          <ArrowLeft className="h-4 w-4" /> Bites
         </button>
         <h1 className="font-display text-3xl font-bold text-foreground">{t.help.title}</h1>
         <p className="text-muted-foreground mt-1 mb-8">{t.help.subtitle}</p>

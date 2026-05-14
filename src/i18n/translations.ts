@@ -93,12 +93,12 @@ export const translations = {
     },
     help: {
       title: 'Ayuda',
-      subtitle: 'Preguntas frecuentes sobre WeEat.',
+      subtitle: 'Preguntas frecuentes sobre Bites.',
       faq: [
-        { q: '¿Qué es WeEat?', a: 'WeEat es una guía foodie colaborativa para descubrir los mejores lugares para comer en Buenos Aires.' },
+        { q: '¿Qué es Bites?', a: 'Bites es una guía foodie colaborativa para descubrir los mejores lugares para comer en Buenos Aires.' },
         { q: '¿Cómo agrego un lugar?', a: 'Podés usar el botón "Agregar lugar" en la barra de navegación o ir a la sección correspondiente.' },
         { q: '¿Cómo funcionan los favoritos?', a: 'Tocá el ícono de corazón en cualquier lugar para guardarlo. Tus favoritos se guardan en tu navegador.' },
-        { q: '¿La app es gratis?', a: 'Sí, WeEat es completamente gratuita.' },
+        { q: '¿La app es gratis?', a: 'Sí, Bites es completamente gratuita.' },
         { q: '¿Puedo sugerir correcciones?', a: 'Sí, usá la página de contacto para enviarnos tus sugerencias.' },
       ],
     },
@@ -122,7 +122,7 @@ export const translations = {
     },
     share: {
       copied: '¡Link copiado al portapapeles!',
-      title: 'Mirá este lugar en WeEat',
+      title: 'Mirá este lugar en Bites',
     },
     footer: {
       tagline: 'Tu guía foodie de Buenos Aires',
@@ -225,12 +225,12 @@ export const translations = {
     },
     help: {
       title: 'Help',
-      subtitle: 'Frequently asked questions about WeEat.',
+      subtitle: 'Frequently asked questions about Bites.',
       faq: [
-        { q: 'What is WeEat?', a: 'WeEat is a collaborative foodie guide to discover the best places to eat in Buenos Aires.' },
+        { q: 'What is Bites?', a: 'Bites is a collaborative foodie guide to discover the best places to eat in Buenos Aires.' },
         { q: 'How do I add a place?', a: 'You can use the "Add place" button in the navigation bar or go to the corresponding section.' },
         { q: 'How do favorites work?', a: 'Tap the heart icon on any place to save it. Your favorites are stored in your browser.' },
-        { q: 'Is the app free?', a: 'Yes, WeEat is completely free.' },
+        { q: 'Is the app free?', a: 'Yes, Bites is completely free.' },
         { q: 'Can I suggest corrections?', a: 'Yes, use the contact page to send us your suggestions.' },
       ],
     },
@@ -254,7 +254,7 @@ export const translations = {
     },
     share: {
       copied: 'Link copied to clipboard!',
-      title: 'Check out this place on WeEat',
+      title: 'Check out this place on Bites',
     },
     footer: {
       tagline: 'Your Buenos Aires foodie guide',

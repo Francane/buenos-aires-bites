@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 
-const STORAGE_KEY = 'weeat-favorites';
+const STORAGE_KEY = 'bites-favorites';
 
 function loadLocal(): string[] {
   try {

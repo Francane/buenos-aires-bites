@@ -15,7 +15,7 @@ export default function Footer() {
             <div className="p-2 rounded-xl bg-primary/10">
               <MapPin className="h-5 w-5 text-primary" />
             </div>
-            WeEat
+            Bites
           </div>
           <p className="text-muted-foreground max-w-md leading-relaxed">{t.footer.tagline}</p>
           <div className="flex gap-6 text-sm font-medium">
@@ -24,7 +24,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-10 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-2">
-          <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} WeEat. {t.footer.rights}</p>
+          <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} Bites. {t.footer.rights}</p>
           <p className="text-xs text-muted-foreground flex items-center gap-1">
             Made with <Heart className="h-3 w-3 text-primary fill-primary" /> in Buenos Aires
           </p>

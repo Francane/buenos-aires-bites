@@ -88,7 +88,7 @@ export default function Auth() {
               {mode === 'signin' ? 'Bienvenido' : 'Creá tu cuenta'}
             </h1>
             <p className="text-sm text-muted-foreground">
-              {mode === 'signin' ? 'Iniciá sesión para guardar favoritos y reseñas' : 'Sumate a la comunidad WeEat'}
+              {mode === 'signin' ? 'Iniciá sesión para guardar favoritos y reseñas' : 'Sumate a la comunidad Bites'}
             </p>
           </div>
 

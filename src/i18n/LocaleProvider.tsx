@@ -11,13 +11,13 @@ const LocaleContext = createContext<LocaleContextValue | null>(null);
 
 export function LocaleProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(() => {
-    const saved = localStorage.getItem('weeat-locale');
+    const saved = localStorage.getItem('bites-locale');
     return (saved === 'en' ? 'en' : 'es') as Locale;
   });
 
   const setLocale = useCallback((l: Locale) => {
     setLocaleState(l);
-    localStorage.setItem('weeat-locale', l);
+    localStorage.setItem('bites-locale', l);
   }, []);
 
   const value = useMemo(() => ({
