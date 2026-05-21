@@ -54,7 +54,7 @@ export default function Index() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [focusVenueId] = useState<string | null>(null);
 
-  const { data: allVenues = [] } = useVenues();
+  const { data: allVenues = [], isLoading: venuesLoading } = useVenues();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchNeighborhood, setSearchNeighborhood] = useState('');
@@ -149,6 +149,7 @@ export default function Index() {
         isFavorite={isFavorite}
         onToggleFavorite={handleToggleFavorite}
         onSelectVenue={handleSelectVenue}
+        loading={venuesLoading}
       />
 
       <FavoritesSection

@@ -37,7 +37,7 @@ function useCountUp(target: number, duration = 2000) {
 
 export default function StatsSection() {
   const { locale } = useLocale();
-  const { data: venues = [] } = useVenues();
+  const { data: venues = [], isLoading } = useVenues();
   const neighborhoods = [...new Set(venues.map(v => v.neighborhood))].length;
   const totalReviews = venues.reduce((acc, v) => acc + v.reviewCount, 0);
   const avgRating = venues.length ? +(venues.reduce((acc, v) => acc + v.rating, 0) / venues.length).toFixed(1) : 0;
@@ -54,7 +54,7 @@ export default function StatsSection() {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {stats.map((stat, i) => (
-            <StatCard key={stat.label} stat={stat} delay={i * 0.1} />
+            <StatCard key={stat.label} stat={stat} delay={i * 0.1} loading={isLoading} />
           ))}
         </div>
       </div>
@@ -62,9 +62,9 @@ export default function StatsSection() {
   );
 }
 
-function StatCard({ stat, delay }: { stat: { icon: typeof MapPin; value: number; label: string; suffix: string; isDecimal?: boolean }; delay: number }) {
+function StatCard({ stat, delay, loading }: { stat: { icon: typeof MapPin; value: number; label: string; suffix: string; isDecimal?: boolean }; delay: number; loading: boolean }) {
   const { count, ref } = useCountUp(stat.isDecimal ? Math.floor(stat.value * 10) : stat.value);
-  const display = stat.isDecimal ? (count / 10).toFixed(1) : count.toLocaleString();
+  const display = loading ? '—' : stat.isDecimal ? (count / 10).toFixed(1) : count.toLocaleString();
 
   return (
     <motion.div

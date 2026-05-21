@@ -62,7 +62,9 @@ async function fetchVenues(): Promise<Venue[]> {
   ]);
 
   if (vErr) throw vErr;
-  if (rErr) throw rErr;
+  if (rErr) {
+    console.warn('Could not load venue reviews, showing venues without reviews.', rErr);
+  }
 
   const reviewsByVenue = new Map<string, VenueReview[]>();
   for (const r of (reviewRows ?? []) as ReviewRow[]) {
