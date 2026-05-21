@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Menu, X, Search, Heart, MapPin, Plus, Moon, Sun, User as UserIcon, LogIn, BookmarkIcon } from 'lucide-react';
+import { Menu, X, Search, Heart, Plus, Moon, Sun, User as UserIcon, LogIn, BookmarkIcon } from 'lucide-react';
+import BitesLogo from '@/components/brand/BitesLogo';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useLocale } from '@/i18n/LocaleProvider';
@@ -99,16 +100,8 @@ export default function Navbar({ favCount, onSearchOpen, onAddPlace }: NavbarPro
     >
       <div className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-primary via-accent to-primary transition-all duration-150" style={{ width: `${scrollProgress}%` }} />
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
-        <button onClick={goHome} className="flex items-center gap-2.5 font-display text-xl font-bold text-foreground group" aria-label="Bites — Home">
-          <motion.div
-            whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
-            transition={{ duration: 0.5 }}
-            className="relative p-1.5 rounded-lg bg-gradient-to-br from-primary/15 to-accent/15 group-hover:from-primary/25 group-hover:to-accent/25 transition-colors ring-1 ring-primary/10"
-          >
-            <span className="absolute inset-0 rounded-lg bg-primary/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
-            <MapPin className="relative h-4 w-4 text-primary" />
-          </motion.div>
-          <span className="group-hover:text-gradient-animated transition-colors">Bites</span>
+        <button onClick={goHome} className="flex items-center text-primary group" aria-label="Bites — Home">
+          <BitesLogo className="h-8 w-auto group-hover:text-accent transition-colors" />
         </button>
 
         <nav className="hidden md:flex items-center gap-1">

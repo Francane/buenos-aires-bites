@@ -1,6 +1,7 @@
-import { MapPin, Heart } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { useLocale } from '@/i18n/LocaleProvider';
 import { Link } from 'react-router-dom';
+import BitesLogo from '@/components/brand/BitesLogo';
 
 export default function Footer() {
   const { t } = useLocale();
@@ -11,12 +12,7 @@ export default function Footer() {
 
       <div className="container mx-auto px-4 py-14">
         <div className="flex flex-col items-center text-center gap-6">
-          <div className="flex items-center gap-2 font-display text-2xl font-bold">
-            <div className="p-2 rounded-xl bg-primary/10">
-              <MapPin className="h-5 w-5 text-primary" />
-            </div>
-            Bites
-          </div>
+          <BitesLogo className="h-10 w-auto text-primary" animated={false} />
           <p className="text-muted-foreground max-w-md leading-relaxed">{t.footer.tagline}</p>
           <div className="flex gap-6 text-sm font-medium">
             <Link to="/ayuda" className="text-muted-foreground hover:text-primary transition-colors">{t.help.title}</Link>
