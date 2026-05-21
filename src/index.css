@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Hind:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -15,41 +15,41 @@
     --popover: 40 30% 99%;
     --popover-foreground: 20 25% 12%;
 
-    --primary: 15 75% 52%;
-    --primary-foreground: 40 30% 98%;
+    --primary: 19 56% 40%;
+    --primary-foreground: 37 60% 96%;
 
-    --secondary: 150 18% 90%;
-    --secondary-foreground: 150 20% 20%;
+    --secondary: 35 35% 88%;
+    --secondary-foreground: 19 40% 20%;
 
-    --muted: 35 20% 93%;
-    --muted-foreground: 20 10% 45%;
+    --muted: 35 25% 92%;
+    --muted-foreground: 20 12% 40%;
 
-    --accent: 35 85% 52%;
-    --accent-foreground: 20 25% 12%;
+    --accent: 28 61% 50%;
+    --accent-foreground: 20 30% 12%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 30 15% 88%;
-    --input: 30 15% 88%;
-    --ring: 15 75% 52%;
+    --border: 28 22% 84%;
+    --input: 28 22% 84%;
+    --ring: 19 56% 40%;
 
     --radius: 0.75rem;
 
-    --wine: 350 45% 35%;
-    --wine-foreground: 350 10% 95%;
+    --wine: 15 43% 29%;
+    --wine-foreground: 37 30% 95%;
 
-    --sage: 150 25% 45%;
-    --sage-foreground: 150 10% 98%;
+    --sage: 28 35% 45%;
+    --sage-foreground: 37 20% 98%;
 
-    --cream: 40 40% 95%;
-    --cream-dark: 35 25% 88%;
+    --cream: 37 55% 92%;
+    --cream-dark: 35 35% 84%;
 
-    --gold: 42 90% 55%;
-    --gold-foreground: 42 90% 15%;
+    --gold: 37 71% 70%;
+    --gold-foreground: 19 40% 15%;
 
-    --font-display: 'Playfair Display', Georgia, serif;
-    --font-body: 'DM Sans', system-ui, sans-serif;
+    --font-display: 'Archivo Black', system-ui, sans-serif;
+    --font-body: 'Hind', system-ui, sans-serif;
 
     --glass-bg: 40 30% 99% / 0.7;
     --glass-border: 30 15% 88% / 0.5;
@@ -65,25 +65,25 @@
   }
 
   .dark {
-    --background: 20 15% 8%;
-    --foreground: 40 20% 92%;
-    --card: 20 15% 11%;
-    --card-foreground: 40 20% 92%;
-    --popover: 20 15% 11%;
-    --popover-foreground: 40 20% 92%;
-    --primary: 15 75% 55%;
-    --primary-foreground: 40 30% 98%;
-    --secondary: 150 10% 18%;
-    --secondary-foreground: 150 15% 85%;
-    --muted: 20 10% 18%;
-    --muted-foreground: 20 10% 60%;
-    --accent: 35 85% 52%;
-    --accent-foreground: 40 30% 98%;
-    --destructive: 0 62.8% 30.6%;
+    --background: 19 18% 8%;
+    --foreground: 37 30% 92%;
+    --card: 19 18% 11%;
+    --card-foreground: 37 30% 92%;
+    --popover: 19 18% 11%;
+    --popover-foreground: 37 30% 92%;
+    --primary: 28 61% 52%;
+    --primary-foreground: 19 40% 10%;
+    --secondary: 19 15% 18%;
+    --secondary-foreground: 37 25% 88%;
+    --muted: 19 12% 18%;
+    --muted-foreground: 28 15% 62%;
+    --accent: 37 71% 60%;
+    --accent-foreground: 19 40% 10%;
+    --destructive: 0 62.8% 40%;
     --destructive-foreground: 210 40% 98%;
-    --border: 20 10% 20%;
-    --input: 20 10% 20%;
-    --ring: 15 75% 52%;
+    --border: 19 12% 22%;
+    --input: 19 12% 22%;
+    --ring: 28 61% 52%;
 
     --glass-bg: 20 15% 11% / 0.7;
     --glass-border: 20 10% 20% / 0.5;
