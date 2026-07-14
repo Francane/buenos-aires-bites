@@ -18,9 +18,12 @@ import VenueCard from '@/components/venues/VenueCard';
 import VenueGallery from '@/components/venues/VenueGallery';
 import VenueReviews from '@/components/venues/VenueReviews';
 import AiReviewSummary from '@/components/venues/AiReviewSummary';
+import UserReviewForm from '@/components/venues/UserReviewForm';
+import CheckInsFeed from '@/components/venues/CheckInsFeed';
 import { useAiReviewSummary } from '@/hooks/useAiVenues';
 import AddToListButton from '@/components/lists/AddToListButton';
 import CheckInButton from '@/components/venues/CheckInButton';
+import { slugify } from '@/lib/slug';
 import { cn } from '@/lib/utils';
 
 function PriceRange({ level }: { level: number }) {
@@ -147,7 +150,7 @@ export default function VenuePage() {
           <nav aria-label="Breadcrumb" className="hidden md:flex items-center gap-1.5 text-xs text-foreground/70 px-3 py-1.5 rounded-full bg-background/60 backdrop-blur-md border border-border/60">
             <Link to="/" className="hover:text-primary transition-colors">{t.nav.home}</Link>
             <span>/</span>
-            <span className="text-foreground/90">{venue.neighborhood}</span>
+            <Link to={`/barrio/${slugify(venue.neighborhood)}`} className="text-foreground/90 hover:text-primary transition-colors">{venue.neighborhood}</Link>
             <span>/</span>
             <span className="font-semibold text-foreground truncate max-w-[180px]">{venue.name}</span>
           </nav>
@@ -284,6 +287,10 @@ export default function VenuePage() {
                 <VenueReviews reviews={venue.reviews} title={t.detail.reviews} />
               </>
             )}
+
+            {/* Community reviews & check-ins */}
+            <UserReviewForm venueId={venue.id} />
+            <CheckInsFeed venueId={venue.id} />
           </motion.div>
 
           {/* Sidebar */}
