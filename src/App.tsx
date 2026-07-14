@@ -17,6 +17,8 @@ import Auth from "./pages/Auth";
 import Perfil from "./pages/Perfil";
 import Listas from "./pages/Listas";
 import ListaDetalle from "./pages/ListaDetalle";
+import Barrio from "./pages/Barrio";
+import OnboardingModal from "./components/onboarding/OnboardingModal";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +32,7 @@ function AnimatedRoutes() {
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Index />} />
           <Route path="/venue/:id" element={<VenuePage />} />
+          <Route path="/barrio/:slug" element={<PageTransition><Barrio /></PageTransition>} />
           <Route path="/agregar-lugar" element={<PageTransition><AgregarLugar /></PageTransition>} />
           <Route path="/ayuda" element={<PageTransition><Ayuda /></PageTransition>} />
           <Route path="/contacto" element={<PageTransition><Contacto /></PageTransition>} />
@@ -53,6 +56,7 @@ const App = () => (
           <AuthProvider>
             <ErrorBoundary>
               <AnimatedRoutes />
+              <OnboardingModal />
             </ErrorBoundary>
           </AuthProvider>
         </BrowserRouter>
