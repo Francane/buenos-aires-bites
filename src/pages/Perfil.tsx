@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
-import { Loader2, LogOut, ArrowLeft, Heart } from 'lucide-react';
+import { Loader2, LogOut, ArrowLeft, Heart, MapPin, Flame } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
@@ -19,6 +19,8 @@ export default function Perfil() {
   const [bio, setBio] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
   const [favCount, setFavCount] = useState(0);
+  const [checkInCount, setCheckInCount] = useState(0);
+  const [streak, setStreak] = useState(0);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -29,9 +31,10 @@ export default function Perfil() {
   useEffect(() => {
     if (!user) return;
     (async () => {
-      const [{ data: profile }, { count }] = await Promise.all([
+      const [{ data: profile }, { count }, { data: checkIns }] = await Promise.all([
         supabase.from('profiles').select('display_name, bio, avatar_url').eq('user_id', user.id).maybeSingle(),
         supabase.from('favorites').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
+        supabase.from('check_ins').select('visited_at').eq('user_id', user.id).order('visited_at', { ascending: false }).limit(365),
       ]);
       if (profile) {
         setDisplayName(profile.display_name ?? '');
@@ -39,6 +42,26 @@ export default function Perfil() {
         setAvatarUrl(profile.avatar_url ?? '');
       }
       setFavCount(count ?? 0);
+      const rows = checkIns ?? [];
+      setCheckInCount(rows.length);
+      // streak: count of consecutive weeks (from current week backwards) with at least one visit
+      const weeks = new Set(rows.map(r => {
+        const d = new Date(r.visited_at);
+        const day = d.getUTCDay();
+        const monday = new Date(d);
+        monday.setUTCDate(d.getUTCDate() - ((day + 6) % 7));
+        return monday.toISOString().slice(0, 10);
+      }));
+      let s = 0;
+      const now = new Date();
+      const day = now.getUTCDay();
+      const cursor = new Date(now);
+      cursor.setUTCDate(now.getUTCDate() - ((day + 6) % 7));
+      while (weeks.has(cursor.toISOString().slice(0, 10))) {
+        s++;
+        cursor.setUTCDate(cursor.getUTCDate() - 7);
+      }
+      setStreak(s);
       setLoading(false);
     })();
   }, [user]);
@@ -86,12 +109,26 @@ export default function Perfil() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 mb-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
             <div className="rounded-xl bg-muted/30 p-4">
               <div className="flex items-center gap-2 text-muted-foreground text-xs mb-1">
                 <Heart className="h-3.5 w-3.5" /> Favoritos
               </div>
-              <div className="text-2xl font-bold">{favCount}</div>
+              <div className="text-2xl font-bold tabular-nums">{favCount}</div>
+            </div>
+            <div className="rounded-xl bg-muted/30 p-4">
+              <div className="flex items-center gap-2 text-muted-foreground text-xs mb-1">
+                <MapPin className="h-3.5 w-3.5" /> Visitas
+              </div>
+              <div className="text-2xl font-bold tabular-nums">{checkInCount}</div>
+            </div>
+            <div className={`rounded-xl p-4 border ${streak > 0 ? 'bg-gradient-to-br from-orange-500/15 to-rose-500/10 border-orange-500/30' : 'bg-muted/30 border-transparent'}`}>
+              <div className="flex items-center gap-2 text-muted-foreground text-xs mb-1">
+                <Flame className={`h-3.5 w-3.5 ${streak > 0 ? 'text-orange-500' : ''}`} /> Racha
+              </div>
+              <div className="text-2xl font-bold tabular-nums">
+                {streak}<span className="text-sm font-medium text-muted-foreground"> sem</span>
+              </div>
             </div>
             <div className="rounded-xl bg-muted/30 p-4">
               <div className="text-muted-foreground text-xs mb-1">Miembro desde</div>
