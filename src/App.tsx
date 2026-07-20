@@ -18,6 +18,7 @@ import Perfil from "./pages/Perfil";
 import Listas from "./pages/Listas";
 import ListaDetalle from "./pages/ListaDetalle";
 import Barrio from "./pages/Barrio";
+import OAuthConsent from "./pages/OAuthConsent";
 import OnboardingModal from "./components/onboarding/OnboardingModal";
 import NotFound from "./pages/NotFound";
 
@@ -40,6 +41,7 @@ function AnimatedRoutes() {
           <Route path="/perfil" element={<PageTransition><Perfil /></PageTransition>} />
           <Route path="/listas" element={<PageTransition><Listas /></PageTransition>} />
           <Route path="/lista/:id" element={<PageTransition><ListaDetalle /></PageTransition>} />
+          <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
           <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
         </Routes>
       </AnimatePresence>
