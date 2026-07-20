@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { Loader2, Mail, Lock, ArrowLeft } from 'lucide-react';
@@ -11,8 +11,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import BackgroundFX from '@/components/layout/BackgroundFX';
 
+/** Only allow same-origin relative paths for the post-auth redirect. */
+function safeNext(raw: string | null): string {
+  if (!raw) return '/';
+  if (!raw.startsWith('/') || raw.startsWith('//')) return '/';
+  return raw;
+}
+
 export default function Auth() {
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const next = safeNext(params.get('next'));
   const { user, loading: authLoading } = useAuth();
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [email, setEmail] = useState('');
@@ -21,8 +30,8 @@ export default function Auth() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!authLoading && user) navigate('/', { replace: true });
-  }, [user, authLoading, navigate]);
+    if (!authLoading && user) navigate(next, { replace: true });
+  }, [user, authLoading, navigate, next]);
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,7 +42,7 @@ export default function Auth() {
           email,
           password,
           options: {
-            emailRedirectTo: window.location.origin,
+            emailRedirectTo: window.location.origin + next,
             data: { display_name: displayName || email.split('@')[0] },
           },
         });
@@ -44,7 +53,7 @@ export default function Auth() {
         if (error) throw error;
         toast.success('Bienvenido de nuevo 👋');
       }
-      navigate('/', { replace: true });
+      navigate(next, { replace: true });
     } catch (err: any) {
       const msg = err?.message || 'Error de autenticación';
       if (msg.includes('already registered') || msg.includes('User already')) {
@@ -62,13 +71,14 @@ export default function Auth() {
   const handleGoogle = async () => {
     setLoading(true);
     const result = await lovable.auth.signInWithOAuth('google', {
-      redirect_uri: window.location.origin,
+      redirect_uri: window.location.origin + next,
     });
     if (result.error) {
       toast.error('No se pudo iniciar sesión con Google');
       setLoading(false);
     }
   };
+
 
   return (
     <div className="min-h-screen relative flex items-center justify-center px-4 py-12">
