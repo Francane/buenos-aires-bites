@@ -105,7 +105,7 @@ export default function VenuePage() {
       {/* === CINEMATIC HERO === */}
       <section
         ref={heroRef}
-        className="relative h-[78vh] md:h-[88vh] overflow-hidden"
+        className="relative h-[42vh] min-h-[310px] max-h-[520px] md:h-[54vh] overflow-hidden bg-muted"
       >
         {/* Backdrop image with parallax */}
         <motion.div
@@ -129,8 +129,8 @@ export default function VenuePage() {
               'radial-gradient(ellipse at center, transparent 30%, hsl(var(--background) / 0.3) 100%)',
           }}
         />
-        <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-background via-background/85 to-transparent pointer-events-none" />
-        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-background/60 to-transparent pointer-events-none" />
+        <div className="hidden" />
+        <div className="hidden" />
 
         {/* Back + breadcrumb */}
         <motion.div
@@ -157,7 +157,7 @@ export default function VenuePage() {
         </motion.div>
 
         {/* Hero content */}
-        <div className="absolute inset-x-0 bottom-0 px-6 md:px-12 pb-16 md:pb-20">
+        <div className="hidden">
           <div className="container mx-auto max-w-5xl">
             {/* Badges row */}
             <motion.div
@@ -237,7 +237,7 @@ export default function VenuePage() {
         {/* Scroll hint */}
         <motion.div
           style={{ opacity: scrollHintOpacity }}
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 pointer-events-none"
+          className="hidden"
         >
           <motion.div
             animate={{ y: [0, 6, 0] }}
@@ -251,14 +251,24 @@ export default function VenuePage() {
       </section>
 
       {/* === CONTENT === */}
-      <div className="container mx-auto px-4 md:px-6 py-10 md:py-14 max-w-7xl">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-14">
+      <div className="container mx-auto px-4 md:px-6 py-8 md:py-12 max-w-6xl">
+        <div className="mb-9 border-b border-border pb-8">
+          <p className="text-xs font-bold uppercase text-wine mb-3">{venue.cuisine} / <Link to={`/barrio/${slugify(venue.neighborhood)}`} className="hover:text-primary">{venue.neighborhood}</Link></p>
+          <h1 className="font-display text-5xl md:text-7xl leading-none text-foreground">{venue.name}</h1>
+          <div className="flex flex-wrap items-center gap-3 mt-4 text-sm text-muted-foreground">
+            <span className="inline-flex items-center gap-1 font-semibold text-foreground"><Star className="h-4 w-4 fill-accent text-accent-foreground" /> {venue.rating.toFixed(1)}</span>
+            <span>({venue.reviewCount})</span>
+            {venue.priceRange && <><span aria-hidden="true">·</span><PriceRange level={venue.priceRange} /></>}
+            <span aria-hidden="true">·</span><span>{venue.hours}</span>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-14">
           {/* Main column */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="lg:col-span-2 space-y-12"
+            className="lg:col-span-2 space-y-10"
           >
             {/* Description */}
             <section>
@@ -300,17 +310,17 @@ export default function VenuePage() {
             transition={{ delay: 0.5 }}
             className="lg:sticky lg:top-24 lg:self-start"
           >
-            <div className="rounded-2xl bg-card/95 backdrop-blur-sm border border-border shadow-xl overflow-hidden">
+            <div className="bg-card border border-border rounded-md overflow-hidden">
               {/* Primary CTA */}
               <div className="p-5 border-b border-border/60">
                 <a
                   href={directionsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative w-full inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl bg-primary text-primary-foreground font-semibold text-sm shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background overflow-hidden"
+                  className="w-full inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-md bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition-colors"
                 >
                   <span
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-background/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"
+                    className="hidden"
                     aria-hidden
                   />
                   <Navigation className="h-4 w-4 relative" />
@@ -478,10 +488,10 @@ export default function VenuePage() {
         initial={{ y: 80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.3, duration: 0.4 }}
-        className="md:hidden fixed bottom-[68px] inset-x-0 z-40 px-3 pb-2"
+        className="md:hidden fixed bottom-[64px] inset-x-0 z-40 px-3 pb-2"
         style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 0.5rem)' }}
       >
-        <div className="flex items-center gap-2 p-2 rounded-2xl glass-strong shadow-lg">
+        <div className="flex items-center gap-2 p-2 rounded-md bg-card border border-border">
           <button
             onClick={handleToggleFav}
             aria-pressed={fav}
@@ -504,7 +514,7 @@ export default function VenuePage() {
             href={directionsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 h-11 inline-flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground font-semibold text-sm shadow-md shadow-primary/25"
+            className="flex-1 h-11 inline-flex items-center justify-center gap-2 rounded-md bg-primary text-primary-foreground font-semibold text-sm"
           >
             <Navigation className="h-4 w-4" />
             {t.detail.directions}
