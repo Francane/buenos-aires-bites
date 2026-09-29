@@ -70,7 +70,7 @@ export default function VenueGrid({ venues, isFavorite, onToggleFavorite, onSele
 
   if (loading) {
     return (
-      <section id="categorias" className="py-16">
+      <section id="categorias" className="py-12 md:py-20">
         <div className="container mx-auto px-4"><SkeletonLoader count={6} /></div>
       </section>
     );
@@ -79,7 +79,7 @@ export default function VenueGrid({ venues, isFavorite, onToggleFavorite, onSele
   const clearAll = () => setParams(new URLSearchParams(), { replace: true });
 
   return (
-    <section id="categorias" className="py-16">
+    <section id="categorias" className="py-12 md:py-20">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -91,7 +91,7 @@ export default function VenueGrid({ venues, isFavorite, onToggleFavorite, onSele
             <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground">{t.venues.title}</h2>
             <p className="text-muted-foreground mt-1">{t.venues.subtitle}</p>
           </div>
-          <div className="flex items-center gap-1 p-1 rounded-xl glass">
+          <div className="flex items-center gap-1 p-1 rounded-md bg-card border border-border">
             <button onClick={() => set({ view: 'grid' })} className={`p-2 rounded-lg transition-colors ${view === 'grid' ? 'bg-primary/10 text-primary' : 'text-muted-foreground'}`} aria-label={t.venues.grid}>
               <LayoutGrid className="h-4 w-4" />
             </button>
@@ -110,7 +110,7 @@ export default function VenueGrid({ venues, isFavorite, onToggleFavorite, onSele
           </div>
 
           <Select value={cuisineFilter || 'all'} onValueChange={v => set({ cuisine: v })}>
-            <SelectTrigger className="w-auto min-w-[140px] h-9 rounded-xl glass border-border/60 text-sm">
+            <SelectTrigger className="w-auto min-w-[140px] h-9 rounded-md bg-card border border-border border-border/60 text-sm">
               <SelectValue placeholder={t.venues.filterByCuisine} />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
@@ -120,7 +120,7 @@ export default function VenueGrid({ venues, isFavorite, onToggleFavorite, onSele
           </Select>
 
           <Select value={tagFilter || 'all'} onValueChange={v => set({ tag: v })}>
-            <SelectTrigger className="w-auto min-w-[140px] h-9 rounded-xl glass border-border/60 text-sm">
+            <SelectTrigger className="w-auto min-w-[140px] h-9 rounded-md bg-card border border-border border-border/60 text-sm">
               <SelectValue placeholder={t.venues.filterByTag} />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
@@ -130,7 +130,7 @@ export default function VenueGrid({ venues, isFavorite, onToggleFavorite, onSele
           </Select>
 
           <Select value={price || 'all'} onValueChange={v => set({ price: v })}>
-            <SelectTrigger className="w-auto min-w-[110px] h-9 rounded-xl glass border-border/60 text-sm">
+            <SelectTrigger className="w-auto min-w-[110px] h-9 rounded-md bg-card border border-border border-border/60 text-sm">
               <SelectValue placeholder="Precio" />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
@@ -143,7 +143,7 @@ export default function VenueGrid({ venues, isFavorite, onToggleFavorite, onSele
           </Select>
 
           <Select value={String(minRating || 'all')} onValueChange={v => set({ rating: v === 'all' ? null : v })}>
-            <SelectTrigger className="w-auto min-w-[110px] h-9 rounded-xl glass border-border/60 text-sm">
+            <SelectTrigger className="w-auto min-w-[110px] h-9 rounded-md bg-card border border-border border-border/60 text-sm">
               <SelectValue placeholder="Rating" />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
@@ -156,14 +156,14 @@ export default function VenueGrid({ venues, isFavorite, onToggleFavorite, onSele
 
           <button
             onClick={() => set({ open: openNow ? null : '1' })}
-            className={`h-9 px-3 rounded-xl border text-sm font-medium transition-all inline-flex items-center gap-1.5 ${openNow ? 'bg-sage/15 text-sage border-sage/30' : 'glass border-border/60 text-foreground'}`}
+            className={`h-9 px-3 rounded-md border text-sm font-medium transition-all inline-flex items-center gap-1.5 ${openNow ? 'bg-sage/15 text-sage border-sage/30' : 'glass border-border/60 text-foreground'}`}
           >
             <span className={`h-1.5 w-1.5 rounded-full ${openNow ? 'bg-sage animate-pulse' : 'bg-muted-foreground/50'}`} />
             Abierto ahora
           </button>
 
           <Select value={sort} onValueChange={v => set({ sort: v === 'featured' ? null : v })}>
-            <SelectTrigger className="w-auto min-w-[140px] h-9 rounded-xl glass border-border/60 text-sm">
+            <SelectTrigger className="w-auto min-w-[140px] h-9 rounded-md bg-card border border-border border-border/60 text-sm">
               <SelectValue placeholder="Ordenar" />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
@@ -214,7 +214,7 @@ export default function VenueGrid({ venues, isFavorite, onToggleFavorite, onSele
           <EmptyState title={t.venues.noVenues} description={t.venues.noVenuesDesc} />
         ) : (
           <>
-            <div className={view === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6' : 'flex flex-col gap-4'}>
+            <div className={view === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5' : 'flex flex-col gap-4'}>
               {visible.map(v => (
                 <VenueCard
                   key={v.id}
@@ -232,7 +232,7 @@ export default function VenueGrid({ venues, isFavorite, onToggleFavorite, onSele
                   whileHover={{ scale: 1.03, y: -2 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={() => set({ n: String(visibleCount + PAGE_SIZE) })}
-                  className="px-8 py-3 rounded-xl glass-strong text-primary font-semibold hover:bg-primary/5 transition-colors"
+                  className="px-8 py-3 rounded-md bg-card border border-border-strong text-primary font-semibold hover:bg-primary/5 transition-colors"
                 >
                   {t.venues.loadMore}
                 </motion.button>

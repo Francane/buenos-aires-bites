@@ -40,29 +40,29 @@ export default function HeroSearch({ onSearch, onAiResults }: HeroSearchProps) {
   }, [aiMode, ai.matches, onAiResults]);
 
   return (
-    <section className="py-8">
+    <section className="py-7 md:py-10">
       <div className="container mx-auto px-4">
         <motion.form
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           onSubmit={handleSubmit}
-          className="glass-strong rounded-2xl p-5 max-w-4xl mx-auto"
+          className="bg-card border border-border rounded-md p-4 md:p-5 max-w-6xl mx-auto"
         >
           {/* Mode toggle */}
           <div className="flex items-center justify-between mb-3">
-            <div className="inline-flex items-center gap-1 rounded-full bg-background/60 border border-border p-1 text-xs font-semibold">
+            <div className="inline-flex items-center gap-1 rounded-md bg-muted/50 border border-border p-1 text-xs font-semibold">
               <button
                 type="button"
                 onClick={() => { setAiMode(false); ai.reset(); onAiResults?.(null); }}
-                className={`px-3 py-1.5 rounded-full transition-colors ${!aiMode ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}`}
+                className={`px-3 py-1.5 rounded-sm transition-colors ${!aiMode ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}`}
               >
                 Filtros
               </button>
               <button
                 type="button"
                 onClick={() => setAiMode(true)}
-                className={`px-3 py-1.5 rounded-full transition-colors inline-flex items-center gap-1.5 ${aiMode ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}`}
+                className={`px-3 py-1.5 rounded-sm transition-colors inline-flex items-center gap-1.5 ${aiMode ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}`}
               >
                 <Sparkles className="h-3 w-3" /> Búsqueda IA
               </button>
@@ -90,7 +90,7 @@ export default function HeroSearch({ onSearch, onAiResults }: HeroSearchProps) {
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 placeholder={aiMode ? 'Ej: lugar tranquilo para una primera cita con buen vino…' : t.search.placeholder}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-background/80 border border-input text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
+                className="w-full pl-10 pr-4 py-2.5 rounded-md bg-background border border-input text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
               />
             </div>
             {!aiMode && (
@@ -98,7 +98,7 @@ export default function HeroSearch({ onSearch, onAiResults }: HeroSearchProps) {
                 <select
                   value={neighborhood}
                   onChange={e => setNeighborhood(e.target.value)}
-                  className="px-4 py-2.5 rounded-xl bg-background/80 border border-input text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="px-4 py-2.5 rounded-md bg-background border border-input text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
                 >
                   <option value="">{t.search.allNeighborhoods}</option>
                   {neighborhoods.map(n => <option key={n} value={n}>{n}</option>)}
@@ -106,7 +106,7 @@ export default function HeroSearch({ onSearch, onAiResults }: HeroSearchProps) {
                 <select
                   value={cuisine}
                   onChange={e => setCuisine(e.target.value)}
-                  className="px-4 py-2.5 rounded-xl bg-background/80 border border-input text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="px-4 py-2.5 rounded-md bg-background border border-input text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
                 >
                   <option value="">{t.search.allCategories}</option>
                   {cuisines.map(c => <option key={c} value={c}>{c}</option>)}
@@ -116,7 +116,7 @@ export default function HeroSearch({ onSearch, onAiResults }: HeroSearchProps) {
             <button
               type="submit"
               disabled={ai.loading}
-              className="px-6 py-2.5 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-all hover:-translate-y-0.5 shine inline-flex items-center justify-center gap-2 disabled:opacity-60"
+              className="px-6 py-2.5 rounded-md bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-all  inline-flex items-center justify-center gap-2 disabled:opacity-60"
             >
               {ai.loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
               {aiMode ? 'Buscar con IA' : t.search.button}
