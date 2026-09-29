@@ -95,13 +95,13 @@ export default function Navbar({ favCount, onSearchOpen, onAddPlace }: NavbarPro
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-[transform,background-color,box-shadow] duration-300 will-change-transform ${scrolled ? 'glass-strong shadow-sm' : 'bg-background/60 backdrop-blur-md'} border-b border-border/50 ${hidden && !mobileOpen ? '-translate-y-full' : 'translate-y-0'}`}
+      className={`sticky top-0 z-50 transition-[transform,background-color,box-shadow] duration-300 will-change-transform bg-background border-b border-border/50 ${hidden && !mobileOpen ? '-translate-y-full' : 'translate-y-0'}`}
       style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
-      <div className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-primary via-accent to-primary transition-all duration-150" style={{ width: `${scrollProgress}%` }} />
+      <div className="absolute bottom-0 left-0 h-[2px] bg-primary transition-all duration-150" style={{ width: `${scrollProgress}%` }} />
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
         <button onClick={goHome} className="flex items-center text-primary group" aria-label="Bites — Home">
-          <BitesLogo className="h-8 w-auto group-hover:text-accent transition-colors" />
+          <BitesLogo className="h-8 w-auto" /><span className="hidden sm:inline text-[10px] uppercase font-bold text-wine ml-3 border-l border-border pl-3">Buenos Aires</span>
         </button>
 
         <nav className="hidden md:flex items-center gap-1">
@@ -218,7 +218,7 @@ export default function Navbar({ favCount, onSearchOpen, onAddPlace }: NavbarPro
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="md:hidden border-t border-border/50 overflow-hidden glass"
+            className="md:hidden border-t border-border/50 overflow-hidden bg-background"
           >
             <nav className="flex flex-col p-4 gap-1">
               {sections.map(s => {

@@ -1,9 +1,9 @@
-import { useRef } from 'react';
+
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   ArrowLeft, Heart, Share2, Navigation, Star, Clock, MapPin, Tag,
-  DollarSign, Award, Calendar, ChevronDown,
+  DollarSign, Calendar,
 } from 'lucide-react';
 import { useVenue, useVenues } from '@/data/venues';
 import { useLocale } from '@/i18n/LocaleProvider';
@@ -45,13 +45,6 @@ export default function VenuePage() {
   const { t, locale } = useLocale();
   const { favorites, isFavorite, toggleFavorite } = useFavorites();
   const { share } = useShare();
-  const heroRef = useRef<HTMLDivElement>(null);
-
-  const { scrollY } = useScroll();
-  const heroY = useTransform(scrollY, [0, 600], [0, 150]);
-  const heroScale = useTransform(scrollY, [0, 600], [1, 1.08]);
-  const heroOpacity = useTransform(scrollY, [0, 400], [1, 0.4]);
-  const scrollHintOpacity = useTransform(scrollY, [0, 120], [1, 0]);
 
   const { data: venue, isLoading } = useVenue(id);
   const { data: venues = [] } = useVenues();
@@ -104,33 +97,23 @@ export default function VenuePage() {
 
       {/* === CINEMATIC HERO === */}
       <section
-        ref={heroRef}
-        className="relative h-[78vh] md:h-[88vh] overflow-hidden"
+        className="relative h-[42vh] min-h-[310px] max-h-[520px] md:h-[54vh] overflow-hidden bg-muted"
       >
         {/* Backdrop image with parallax */}
         <motion.div
-          style={{ y: heroY, scale: heroScale, opacity: heroOpacity }}
+
           className="absolute inset-0 will-change-transform"
         >
+          <span className="absolute inset-0 flex items-center justify-center font-display text-4xl text-muted-foreground/70">{venue.name}</span>
           <motion.img
             layoutId={`venue-image-${venue.id}`}
             src={venue.imageUrl}
             alt={venue.name}
-            className="w-full h-full object-cover"
+            onError={e => { e.currentTarget.hidden = true; }}
+            className="relative w-full h-full object-cover"
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           />
         </motion.div>
-
-        {/* Vignette + bottom gradient */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              'radial-gradient(ellipse at center, transparent 30%, hsl(var(--background) / 0.3) 100%)',
-          }}
-        />
-        <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-background via-background/85 to-transparent pointer-events-none" />
-        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-background/60 to-transparent pointer-events-none" />
 
         {/* Back + breadcrumb */}
         <motion.div
@@ -141,13 +124,13 @@ export default function VenuePage() {
         >
           <button
             onClick={() => navigate(-1)}
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-background/70 backdrop-blur-md border border-border text-foreground text-sm font-medium hover:bg-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-md bg-background border border-border text-foreground text-sm font-medium hover:bg-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             aria-label={t.detail.close}
           >
             <ArrowLeft className="h-4 w-4" />
             <span className="hidden sm:inline">{t.detail.close}</span>
           </button>
-          <nav aria-label="Breadcrumb" className="hidden md:flex items-center gap-1.5 text-xs text-foreground/70 px-3 py-1.5 rounded-full bg-background/60 backdrop-blur-md border border-border/60">
+          <nav aria-label="Breadcrumb" className="hidden md:flex items-center gap-1.5 text-xs text-foreground/70 px-3 py-1.5 rounded-md bg-background border border-border/60">
             <Link to="/" className="hover:text-primary transition-colors">{t.nav.home}</Link>
             <span>/</span>
             <Link to={`/barrio/${slugify(venue.neighborhood)}`} className="text-foreground/90 hover:text-primary transition-colors">{venue.neighborhood}</Link>
@@ -156,119 +139,48 @@ export default function VenuePage() {
           </nav>
         </motion.div>
 
-        {/* Hero content */}
-        <div className="absolute inset-x-0 bottom-0 px-6 md:px-12 pb-16 md:pb-20">
-          <div className="container mx-auto max-w-5xl">
-            {/* Badges row */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="flex items-center gap-2 flex-wrap mb-5"
-            >
-              <span
-                className={cn(
-                  'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-md border',
-                  venue.isOpen
-                    ? 'bg-sage/20 text-sage border-sage/30'
-                    : 'bg-destructive/20 text-destructive border-destructive/30',
-                )}
-              >
-                <span
-                  className={cn(
-                    'h-1.5 w-1.5 rounded-full',
-                    venue.isOpen ? 'bg-sage animate-pulse' : 'bg-destructive',
-                  )}
-                />
-                {venue.isOpen ? t.venues.open : t.venues.closed}
-              </span>
-              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-background/70 backdrop-blur-md border border-border text-foreground">
-                {venue.cuisine}
-              </span>
-              {venue.priceRange && (
-                <span className="px-3 py-1 rounded-full bg-background/70 backdrop-blur-md border border-border">
-                  <PriceRange level={venue.priceRange} />
-                </span>
-              )}
-              {venue.featured && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-gold text-gold-foreground shadow-md">
-                  <Award className="h-3.5 w-3.5" />
-                  Featured
-                </span>
-              )}
-            </motion.div>
-
-            {/* Title */}
-            <motion.h1
-              layoutId={`venue-title-${venue.id}`}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              className="font-display text-5xl md:text-7xl lg:text-8xl font-bold text-foreground leading-[1.05] tracking-tight"
-            >
-              {venue.name}
-            </motion.h1>
-
-            {/* Meta */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7, duration: 0.5 }}
-              className="flex items-center gap-5 mt-5 flex-wrap"
-            >
-              <motion.div
-                layoutId={`venue-rating-${venue.id}`}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gold/15 border border-gold/25"
-              >
-                <Star className="h-4 w-4 text-gold fill-gold" />
-                <span className="font-display font-bold text-foreground">{venue.rating.toFixed(1)}</span>
-                <span className="text-sm text-muted-foreground">({venue.reviewCount})</span>
-              </motion.div>
-              <span className="text-sm text-foreground/80 inline-flex items-center gap-1.5">
-                <MapPin className="h-4 w-4" />
-                {venue.neighborhood}
-              </span>
-              <span className="text-sm text-foreground/80 inline-flex items-center gap-1.5">
-                <Clock className="h-4 w-4" />
-                {venue.hours}
-              </span>
-            </motion.div>
-          </div>
+        <div className="absolute top-4 right-4 md:right-8 z-10 flex gap-2">
+          <button onClick={handleToggleFav} aria-pressed={fav} aria-label={t.detail.favorite} className="h-11 w-11 flex items-center justify-center rounded-md bg-card text-foreground border border-border"><Heart className={cn('h-5 w-5', fav && 'fill-primary text-primary')} /></button>
+          <button onClick={() => share(venue)} aria-label={t.detail.share} className="h-11 w-11 flex items-center justify-center rounded-md bg-card text-foreground border border-border"><Share2 className="h-5 w-5" /></button>
         </div>
-
-        {/* Scroll hint */}
-        <motion.div
-          style={{ opacity: scrollHintOpacity }}
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 pointer-events-none"
-        >
-          <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-            className="flex flex-col items-center gap-1 text-muted-foreground"
-          >
-            <span className="text-[10px] font-semibold uppercase tracking-widest">Scroll</span>
-            <ChevronDown className="h-4 w-4" />
-          </motion.div>
-        </motion.div>
       </section>
 
       {/* === CONTENT === */}
-      <div className="container mx-auto px-4 md:px-6 py-10 md:py-14 max-w-7xl">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-14">
+      <div className="container mx-auto px-4 md:px-6 py-8 md:py-12 max-w-6xl">
+        <div className="mb-9 border-b border-border pb-8">
+          <p className="text-xs font-bold uppercase text-wine mb-3">{venue.cuisine} / <Link to={`/barrio/${slugify(venue.neighborhood)}`} className="hover:text-primary">{venue.neighborhood}</Link></p>
+          <h1 className="font-display text-5xl md:text-7xl leading-none text-foreground">{venue.name}</h1>
+          <div className="flex flex-wrap items-center gap-3 mt-4 text-sm text-muted-foreground">
+            <span className="inline-flex items-center gap-1 font-semibold text-foreground"><Star className="h-4 w-4 fill-accent text-accent-foreground" /> {venue.rating.toFixed(1)}</span>
+            <span>({venue.reviewCount})</span>
+            {venue.priceRange && <><span aria-hidden="true">·</span><PriceRange level={venue.priceRange} /></>}
+            <span aria-hidden="true">·</span><span>{venue.hours}</span>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-14">
           {/* Main column */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="lg:col-span-2 space-y-12"
+            className="lg:col-span-2 space-y-10"
           >
             {/* Description */}
-            <section>
-              <h2 className="font-display text-2xl font-bold text-foreground mb-3">
-                {t.detail.description}
+            <section className="border-l-4 border-primary pl-5 py-1">
+              <h2 className="font-body text-xs font-bold uppercase text-wine mb-3">
+                {locale === 'es' ? 'Por qué ir' : 'Why go'}
               </h2>
               <p className="text-foreground/85 leading-relaxed text-[15px]">
                 {venue.description}
               </p>
             </section>
+
+            {venue.tags && venue.tags.length > 0 && (
+              <section>
+                <h2 className="font-display text-2xl text-foreground mb-3">{locale === 'es' ? 'Perfecto para' : 'Perfect for'}</h2>
+                <p className="text-sm text-muted-foreground">{venue.tags.slice(0, 2).join(' · ')}</p>
+              </section>
+            )}
 
             {/* Gallery */}
             {allImages.length > 0 && (
@@ -300,17 +212,17 @@ export default function VenuePage() {
             transition={{ delay: 0.5 }}
             className="lg:sticky lg:top-24 lg:self-start"
           >
-            <div className="rounded-2xl bg-card/95 backdrop-blur-sm border border-border shadow-xl overflow-hidden">
+            <div className="bg-card border border-border rounded-md overflow-hidden">
               {/* Primary CTA */}
               <div className="p-5 border-b border-border/60">
                 <a
                   href={directionsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative w-full inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl bg-primary text-primary-foreground font-semibold text-sm shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background overflow-hidden"
+                  className="w-full inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-md bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition-colors"
                 >
                   <span
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-background/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"
+                    className="hidden"
                     aria-hidden
                   />
                   <Navigation className="h-4 w-4 relative" />
@@ -478,10 +390,10 @@ export default function VenuePage() {
         initial={{ y: 80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.3, duration: 0.4 }}
-        className="md:hidden fixed bottom-[68px] inset-x-0 z-40 px-3 pb-2"
+        className="md:hidden fixed bottom-[64px] inset-x-0 z-40 px-3 pb-2"
         style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 0.5rem)' }}
       >
-        <div className="flex items-center gap-2 p-2 rounded-2xl glass-strong shadow-lg">
+        <div className="flex items-center gap-2 p-2 rounded-md bg-card border border-border">
           <button
             onClick={handleToggleFav}
             aria-pressed={fav}
@@ -504,7 +416,7 @@ export default function VenuePage() {
             href={directionsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 h-11 inline-flex items-center justify-center gap-2 rounded-xl bg-primary text-primary-foreground font-semibold text-sm shadow-md shadow-primary/25"
+            className="flex-1 h-11 inline-flex items-center justify-center gap-2 rounded-md bg-primary text-primary-foreground font-semibold text-sm"
           >
             <Navigation className="h-4 w-4" />
             {t.detail.directions}

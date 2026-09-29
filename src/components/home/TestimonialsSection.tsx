@@ -67,7 +67,7 @@ export default function TestimonialsSection() {
   return (
     <section className="py-20 relative overflow-hidden">
       {/* Decorative gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.03] to-transparent pointer-events-none" />
+      <div className="hidden" />
       
       <div className="container mx-auto px-4 relative">
         <motion.div
@@ -87,9 +87,9 @@ export default function TestimonialsSection() {
 
         <div className="max-w-3xl mx-auto relative">
           {/* glow halo */}
-          <div className="absolute -inset-6 bg-gradient-to-br from-primary/20 via-accent/10 to-wine/10 blur-3xl rounded-full opacity-60 pointer-events-none" />
+          <div className="hidden" />
 
-          <div className="relative glass-strong rounded-3xl p-8 md:p-12 min-h-[280px] flex items-center overflow-hidden">
+          <div className="relative border-y border-border p-8 md:p-12 min-h-[280px] flex items-center overflow-hidden">
             {/* corner quote watermark */}
             <Quote className="absolute -top-4 -left-2 h-32 w-32 text-primary/5 rotate-180" />
             <Quote className="absolute -bottom-4 -right-2 h-32 w-32 text-primary/5" />
@@ -115,7 +115,7 @@ export default function TestimonialsSection() {
                     </motion.div>
                   ))}
                 </div>
-                <p className="text-lg md:text-xl text-foreground leading-relaxed font-body italic">
+                <p className="text-lg md:text-xl text-foreground leading-relaxed font-display italic">
                   "{testimonials[current].content[locale]}"
                 </p>
                 <div className="mt-8 flex items-center justify-center gap-3">
@@ -123,7 +123,7 @@ export default function TestimonialsSection() {
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.3, type: 'spring' }}
-                    className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground font-bold text-sm ring-2 ring-background shadow-lg"
+                    className="w-12 h-12 rounded-full bg-accent flex items-center justify-center text-accent-foreground font-bold text-sm"
                   >
                     {testimonials[current].avatar}
                   </motion.div>
