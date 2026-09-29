@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   ArrowLeft, Heart, Share2, Navigation, Star, Clock, MapPin, Tag,
-  DollarSign, Award, Calendar, ChevronDown,
+  DollarSign, Calendar,
 } from 'lucide-react';
 import { useVenue, useVenues } from '@/data/venues';
 import { useLocale } from '@/i18n/LocaleProvider';
@@ -104,11 +104,13 @@ export default function VenuePage() {
 
           className="absolute inset-0 will-change-transform"
         >
+          <span className="absolute inset-0 flex items-center justify-center font-display text-4xl text-muted-foreground/70">{venue.name}</span>
           <motion.img
             layoutId={`venue-image-${venue.id}`}
             src={venue.imageUrl}
             alt={venue.name}
-            className="w-full h-full object-cover"
+            onError={e => { e.currentTarget.hidden = true; }}
+            className="relative w-full h-full object-cover"
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           />
         </motion.div>
@@ -122,13 +124,13 @@ export default function VenuePage() {
         >
           <button
             onClick={() => navigate(-1)}
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-background/70 backdrop-blur-md border border-border text-foreground text-sm font-medium hover:bg-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-md bg-background border border-border text-foreground text-sm font-medium hover:bg-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             aria-label={t.detail.close}
           >
             <ArrowLeft className="h-4 w-4" />
             <span className="hidden sm:inline">{t.detail.close}</span>
           </button>
-          <nav aria-label="Breadcrumb" className="hidden md:flex items-center gap-1.5 text-xs text-foreground/70 px-3 py-1.5 rounded-full bg-background/60 backdrop-blur-md border border-border/60">
+          <nav aria-label="Breadcrumb" className="hidden md:flex items-center gap-1.5 text-xs text-foreground/70 px-3 py-1.5 rounded-md bg-background border border-border/60">
             <Link to="/" className="hover:text-primary transition-colors">{t.nav.home}</Link>
             <span>/</span>
             <Link to={`/barrio/${slugify(venue.neighborhood)}`} className="text-foreground/90 hover:text-primary transition-colors">{venue.neighborhood}</Link>
@@ -164,14 +166,21 @@ export default function VenuePage() {
             className="lg:col-span-2 space-y-10"
           >
             {/* Description */}
-            <section>
-              <h2 className="font-display text-2xl font-bold text-foreground mb-3">
-                {t.detail.description}
+            <section className="border-l-4 border-primary pl-5 py-1">
+              <h2 className="font-body text-xs font-bold uppercase text-wine mb-3">
+                {locale === 'es' ? 'Por qué ir' : 'Why go'}
               </h2>
               <p className="text-foreground/85 leading-relaxed text-[15px]">
                 {venue.description}
               </p>
             </section>
+
+            {venue.tags && venue.tags.length > 0 && (
+              <section>
+                <h2 className="font-display text-2xl text-foreground mb-3">{locale === 'es' ? 'Perfecto para' : 'Perfect for'}</h2>
+                <p className="text-sm text-muted-foreground">{venue.tags.slice(0, 2).join(' · ')}</p>
+              </section>
+            )}
 
             {/* Gallery */}
             {allImages.length > 0 && (
