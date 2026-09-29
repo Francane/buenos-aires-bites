@@ -51,7 +51,6 @@ export default function VenuePage() {
   const heroY = useTransform(scrollY, [0, 600], [0, 150]);
   const heroScale = useTransform(scrollY, [0, 600], [1, 1.08]);
   const heroOpacity = useTransform(scrollY, [0, 400], [1, 0.4]);
-  const scrollHintOpacity = useTransform(scrollY, [0, 120], [1, 0]);
 
   const { data: venue, isLoading } = useVenue(id);
   const { data: venues = [] } = useVenues();
@@ -121,17 +120,6 @@ export default function VenuePage() {
           />
         </motion.div>
 
-        {/* Vignette + bottom gradient */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              'radial-gradient(ellipse at center, transparent 30%, hsl(var(--background) / 0.3) 100%)',
-          }}
-        />
-        <div className="hidden" />
-        <div className="hidden" />
-
         {/* Back + breadcrumb */}
         <motion.div
           initial={{ opacity: 0, x: -16 }}
@@ -156,98 +144,10 @@ export default function VenuePage() {
           </nav>
         </motion.div>
 
-        {/* Hero content */}
-        <div className="hidden">
-          <div className="container mx-auto max-w-5xl">
-            {/* Badges row */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="flex items-center gap-2 flex-wrap mb-5"
-            >
-              <span
-                className={cn(
-                  'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-md border',
-                  venue.isOpen
-                    ? 'bg-sage/20 text-sage border-sage/30'
-                    : 'bg-destructive/20 text-destructive border-destructive/30',
-                )}
-              >
-                <span
-                  className={cn(
-                    'h-1.5 w-1.5 rounded-full',
-                    venue.isOpen ? 'bg-sage animate-pulse' : 'bg-destructive',
-                  )}
-                />
-                {venue.isOpen ? t.venues.open : t.venues.closed}
-              </span>
-              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-background/70 backdrop-blur-md border border-border text-foreground">
-                {venue.cuisine}
-              </span>
-              {venue.priceRange && (
-                <span className="px-3 py-1 rounded-full bg-background/70 backdrop-blur-md border border-border">
-                  <PriceRange level={venue.priceRange} />
-                </span>
-              )}
-              {venue.featured && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-gold text-gold-foreground shadow-md">
-                  <Award className="h-3.5 w-3.5" />
-                  Featured
-                </span>
-              )}
-            </motion.div>
-
-            {/* Title */}
-            <motion.h1
-              layoutId={`venue-title-${venue.id}`}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              className="font-display text-5xl md:text-7xl lg:text-8xl font-bold text-foreground leading-[1.05] tracking-tight"
-            >
-              {venue.name}
-            </motion.h1>
-
-            {/* Meta */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7, duration: 0.5 }}
-              className="flex items-center gap-5 mt-5 flex-wrap"
-            >
-              <motion.div
-                layoutId={`venue-rating-${venue.id}`}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gold/15 border border-gold/25"
-              >
-                <Star className="h-4 w-4 text-gold fill-gold" />
-                <span className="font-display font-bold text-foreground">{venue.rating.toFixed(1)}</span>
-                <span className="text-sm text-muted-foreground">({venue.reviewCount})</span>
-              </motion.div>
-              <span className="text-sm text-foreground/80 inline-flex items-center gap-1.5">
-                <MapPin className="h-4 w-4" />
-                {venue.neighborhood}
-              </span>
-              <span className="text-sm text-foreground/80 inline-flex items-center gap-1.5">
-                <Clock className="h-4 w-4" />
-                {venue.hours}
-              </span>
-            </motion.div>
-          </div>
+        <div className="absolute top-4 right-4 md:right-8 z-10 flex gap-2">
+          <button onClick={handleToggleFav} aria-pressed={fav} aria-label={t.detail.favorite} className="h-11 w-11 flex items-center justify-center rounded-md bg-card text-foreground border border-border"><Heart className={cn('h-5 w-5', fav && 'fill-primary text-primary')} /></button>
+          <button onClick={() => share(venue)} aria-label={t.detail.share} className="h-11 w-11 flex items-center justify-center rounded-md bg-card text-foreground border border-border"><Share2 className="h-5 w-5" /></button>
         </div>
-
-        {/* Scroll hint */}
-        <motion.div
-          style={{ opacity: scrollHintOpacity }}
-          className="hidden"
-        >
-          <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-            className="flex flex-col items-center gap-1 text-muted-foreground"
-          >
-            <span className="text-[10px] font-semibold uppercase tracking-widest">Scroll</span>
-            <ChevronDown className="h-4 w-4" />
-          </motion.div>
-        </motion.div>
       </section>
 
       {/* === CONTENT === */}
