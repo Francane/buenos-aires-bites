@@ -27,7 +27,8 @@ export default function VenueCard({ venue, isFavorite, onToggleFavorite, layout 
         className={cn('!whitespace-normal text-left w-full h-full !p-0 overflow-hidden bg-card border border-border/70 rounded-md hover:bg-card hover:border-primary/40 transition-[border-color,transform] duration-200 hover:-translate-y-0.5 flex', list ? 'flex-row items-stretch' : 'flex-col items-stretch')}
       >
         <div className={cn('relative overflow-hidden bg-muted shrink-0', list ? 'w-28 sm:w-40 min-h-36' : 'w-full aspect-[4/3]')}>
-          <img src={venue.imageUrl} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.025]" />
+          <span className="absolute inset-0 flex items-center justify-center text-center p-6 font-display text-2xl text-muted-foreground/70">{venue.name}</span>
+          <img src={venue.imageUrl} alt="" loading="lazy" decoding="async" onError={e => { e.currentTarget.hidden = true; }} className="relative h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.025]" />
         </div>
         <div className={cn('flex flex-col min-w-0 w-full', list ? 'p-4 pr-12' : 'p-5')}>
           <p className="text-[11px] font-semibold uppercase text-wine leading-relaxed">{venue.cuisine} <span className="text-muted-foreground mx-1">/</span> {venue.neighborhood}</p>

@@ -1,6 +1,6 @@
-import { useRef } from 'react';
+
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   ArrowLeft, Heart, Share2, Navigation, Star, Clock, MapPin, Tag,
   DollarSign, Award, Calendar, ChevronDown,
@@ -45,12 +45,6 @@ export default function VenuePage() {
   const { t, locale } = useLocale();
   const { favorites, isFavorite, toggleFavorite } = useFavorites();
   const { share } = useShare();
-  const heroRef = useRef<HTMLDivElement>(null);
-
-  const { scrollY } = useScroll();
-  const heroY = useTransform(scrollY, [0, 600], [0, 150]);
-  const heroScale = useTransform(scrollY, [0, 600], [1, 1.08]);
-  const heroOpacity = useTransform(scrollY, [0, 400], [1, 0.4]);
 
   const { data: venue, isLoading } = useVenue(id);
   const { data: venues = [] } = useVenues();
@@ -103,12 +97,11 @@ export default function VenuePage() {
 
       {/* === CINEMATIC HERO === */}
       <section
-        ref={heroRef}
         className="relative h-[42vh] min-h-[310px] max-h-[520px] md:h-[54vh] overflow-hidden bg-muted"
       >
         {/* Backdrop image with parallax */}
         <motion.div
-          style={{ y: heroY, scale: heroScale, opacity: heroOpacity }}
+
           className="absolute inset-0 will-change-transform"
         >
           <motion.img
