@@ -301,3 +301,19 @@
 img {
   -webkit-user-drag: none;
 }
+
+/* Map marker and compact place preview */
+.bites-map-pin { display:flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:50%; border:2px solid hsl(var(--card)); color:hsl(var(--foreground)); box-shadow:0 1px 5px hsl(var(--foreground) / .22); }
+.bites-map-pin--grill { background:hsl(var(--destructive)); color:hsl(var(--card)); }
+.bites-map-pin--pizza { background:hsl(var(--primary)); }
+.bites-map-pin--sage { background:hsl(var(--sage)); }
+.bites-map-pin--blue { background:hsl(var(--wine)); color:hsl(var(--card)); }
+.bites-map-pin--other { background:hsl(var(--accent)); }
+.leaflet-popup-content-wrapper { border-radius: 6px; box-shadow:0 3px 12px hsl(var(--foreground) / .13); background:hsl(var(--card)); color:hsl(var(--foreground)); }
+.leaflet-popup-content { margin:10px; width: min(290px, 70vw) !important; }
+.bites-map-preview { display:flex; gap:10px; align-items:flex-start; font-family:var(--font-body); }
+.bites-map-preview img { width:70px; height:75px; object-fit:cover; border-radius:3px; flex-shrink:0; }
+.bites-map-preview > div { min-width:0; }
+.bites-map-preview strong { display:block; font-family:var(--font-display); font-size:19px; line-height:1.05; }
+.bites-map-preview p { margin:3px 0; font-size:11px; line-height:1.3; color:hsl(var(--muted-foreground)); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.bites-map-preview .bites-map-preview-meta { font-size:9px; text-transform:uppercase; color:hsl(var(--wine)); font-weight:700; }
