@@ -65,7 +65,7 @@ export default function VenueGallery({ images, venueName }: VenueGalleryProps) {
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
             loading="lazy" decoding="async"
           />
-            className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/15 transition-colors" />
+          <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/15 transition-colors" />
           <span className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-background text-xs font-semibold text-foreground">
             <Expand className="h-3.5 w-3.5" />
             Expandir
