@@ -53,6 +53,7 @@ export default function VenueGallery({ images, venueName }: VenueGalleryProps) {
           )}
           aria-label={`Ver foto 1 de ${venueName}`}
         >
+          <span className="absolute inset-0 flex items-center justify-center font-display text-2xl text-muted-foreground/70">{venueName}</span>
           <motion.img
             initial={{ opacity: 0, scale: 1.05 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -60,11 +61,12 @@ export default function VenueGallery({ images, venueName }: VenueGalleryProps) {
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             src={hero}
             alt={`${venueName} foto principal`}
+            onError={e => { e.currentTarget.hidden = true; }}
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
             loading="lazy" decoding="async"
           />
-          <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/15 transition-colors" />
-          <span className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-background/85 backdrop-blur text-xs font-semibold text-foreground opacity-0 group-hover:opacity-100 transition-opacity">
+            className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/15 transition-colors" />
+          <span className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-background text-xs font-semibold text-foreground">
             <Expand className="h-3.5 w-3.5" />
             Expandir
           </span>
@@ -84,6 +86,7 @@ export default function VenueGallery({ images, venueName }: VenueGalleryProps) {
               )}
               aria-label={`Ver foto ${realIndex + 1} de ${venueName}`}
             >
+              <span className="absolute inset-0 flex items-center justify-center font-display text-xl text-muted-foreground/70">{venueName}</span>
               <motion.img
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -91,6 +94,7 @@ export default function VenueGallery({ images, venueName }: VenueGalleryProps) {
                 transition={{ duration: 0.4, delay: i * 0.06 }}
                 src={img}
                 alt={`${venueName} foto ${realIndex + 1}`}
+                onError={e => { e.currentTarget.hidden = true; }}
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
                 loading="lazy" decoding="async"
               />
