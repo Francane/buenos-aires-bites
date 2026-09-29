@@ -1,0 +1,3 @@
+- Use semantic HSL tokens in `src/index.css` for Bites' editorial warm palette; one palette prevents inconsistent surfaces across existing views.
+- Keep venue domain data and filtering in existing hooks/components; the visual iteration must not change persistence or navigation behavior.
+- Use locally bundled Newsreader and Plus Jakarta Sans fonts; local assets avoid remote font availability affecting hierarchy.

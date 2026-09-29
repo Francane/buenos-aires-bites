@@ -1,0 +1,4 @@
+- [x] Reconcile current UI with requested editorial palette and typography.
+- [x] Refine home, restaurant cards, detail, map and existing bottom navigation without changing product data.
+- [x] Apply warm loading and empty states and subtler interactions.
+- [ ] Five-tab bottom navigation, quick plans beyond existing cuisine categories, “Qué pedir” and “No ir si...” — requires approval and actual content/destination definitions.
